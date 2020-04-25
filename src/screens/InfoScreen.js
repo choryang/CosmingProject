@@ -5,9 +5,11 @@ import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } f
 function InfoScreen() {
 
     return (
-        <View>
-            <Text>부가정보</Text>
+        <View style={{flex: 1}}>
+            <Image style={{width: '100%', height: '100%', resizeMode: 'cover'}} source={require('../images/splash.gif')} />
         </View>
+
+
     );
 
 }
