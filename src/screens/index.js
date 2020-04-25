@@ -1,8 +1,9 @@
+import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import SplashScreen from 'react-native-splash-screen';
+//import SplashScreen from 'react-native-splash-screen';
 import HomeScreen from './HomeScreen';
 import RecordScreen from './RecordScreen';
 import MyCosmeticScreen from './MyCosmeticScreen';
@@ -14,12 +15,12 @@ const Stack = createStackNavigator();
 
 function App() {
 
-  useEffect(() => {
+  /*useEffect(() => {
         // 컴포넌트가 마운트 되고 setTimeout함수를실행합니다.
         setTimeout(() => {
            SplashScreen.hide();
         }, 2000);
-      }, []);
+      }, []);*/
 
 
 return (
