@@ -8,6 +8,6 @@
         android:contentDescription="Splashscreen"
         android:scaleType="centerCrop"
         android:background="@color/splashprimary"
-        android:src="@drawable/splash"
+        android:src="@drawable/cosming"
         />
 </RelativeLayout>
