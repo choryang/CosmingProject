@@ -6,7 +6,7 @@ function InfoScreen() {
 
     return (
         <View style={{flex: 1}}>
-            <Text>부가기능</Text>
+            <Text>도움말</Text>
         </View>
 
 

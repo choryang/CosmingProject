@@ -6,7 +6,7 @@ function MyCosmeticScreen() {
 
     return (
         <View>
-            <Text>내화장품</Text>
+            <Text>내 기록</Text>
         </View>
     );
 
