@@ -8,8 +8,8 @@ import HomeScreen from './HomeScreen';
 import RecordScreen from './RecordScreen';
 import MyCosmeticScreen from './MyCosmeticScreen';
 import InfoScreen from './InfoScreen';
-
-
+import ResultDetail from './ResultDetail';
+import CropImage from './CropImage';
 const Stack = createStackNavigator();
 
 
@@ -30,6 +30,8 @@ return (
             <Stack.Screen name="Record" component={RecordScreen}/>
             <Stack.Screen name="MyCosmetic" component={MyCosmeticScreen}/>
             <Stack.Screen name="Info" component={InfoScreen}/>
+            <Stack.Screen name="Detail" component={ResultDetail}/>
+            <Stack.Screen name="Crop" component={CropImage}/>
         </Stack.Navigator>
     </NavigationContainer>
 );

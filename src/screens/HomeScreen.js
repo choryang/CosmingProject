@@ -3,6 +3,7 @@ import React, { useState } from 'react';
  import { NavigationContainer } from '@react-navigation/native';
  import { createStackNavigator } from '@react-navigation/stack';
  import Modal from 'react-native-modal';
+ import ImagePicker from 'react-native-image-picker';
  import { Fonts } from '../Font'
 
  function HomeScreen({navigation}) {
@@ -12,6 +13,40 @@ import React, { useState } from 'react';
     const setModalVisible = () => {
         setIsModalVisible(!isModalVisible);
     }
+
+    const [imageSource, setImageSource] = useState('.');
+        const options = {
+            title: 'Load Photo',
+            storageOptions: {
+            path: 'propose',
+            },
+        };
+
+    const showCamera = () => {
+            ImagePicker.launchCamera(options, (response) => {
+                if (response.error) {
+                    console.log('LaunchCamera Error: ', response.error);
+                }
+                else {
+                    setImageSource(response.uri);
+                    setModalVisible();
+                    navigation.navigate('Crop');
+                }
+            });
+        };
+
+        const showCameraRoll = () => {
+            ImagePicker.launchImageLibrary(options, (response) => {
+                if (response.error) {
+                    console.log('LaunchImageLibrary Error: ', response.error);
+                }
+                else {
+                    setImageSource(response.uri);
+                    setModalVisible();
+                    navigation.navigate('Crop');
+                }
+            });
+        };
 
     return (
         <View style={{flex: 1, backgroundColor: '#ffffff'}}>
@@ -32,10 +67,10 @@ import React, { useState } from 'react';
                         shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5}}>
                             <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색할 화장품 사진 가져오기</Text>
                             <View style={{flexDirection: 'row', paddingTop: 10}}>
-                                <TouchableOpacity style={{alignItems:'center', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 15, margin: 10}}>
+                                <TouchableOpacity style={{alignItems:'center', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 15, margin: 10}} onPress={showCameraRoll}>
                                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>불러오기</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 15, margin: 10}}>
+                                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 15, margin: 10}} onPress={showCamera}>
                                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>새로찍기</Text>
                                 </TouchableOpacity>
                             </View>
@@ -61,6 +96,30 @@ import React, { useState } from 'react';
     );
 
  }
+
+ const styles = StyleSheet.create({
+     Container: {
+       flex: 1,
+       alignItems: 'center',
+       justifyContent: 'center',
+     },
+
+     Photo: {
+       width: 200,
+       height: 200,
+       borderRadius: 8,
+     },
+
+     ImagePickerButton: {
+       borderWidth: 1,
+       borderRadius: 8,
+       borderColor: '#CCCCCC',
+       paddingVertical: 8,
+       paddingHorizontal: 32,
+       marginTop: 16,
+     }
+
+ });
 
 
 
