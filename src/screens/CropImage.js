@@ -1,8 +1,49 @@
 import React, {useState} from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-
+import Modal from 'react-native-modal';
+import ImagePicker from 'react-native-image-picker';
 
 function CropImage({navigation}) {
+
+     const [isModalVisible, setIsModalVisible] = useState(false);
+
+        const setModalVisible = () => {
+            setIsModalVisible(!isModalVisible);
+        }
+
+        const [imageSource, setImageSource] = useState('.');
+            const options = {
+                title: 'Load Photo',
+                storageOptions: {
+                path: 'propose',
+                },
+            };
+
+        const showCamera = () => {
+                ImagePicker.launchCamera(options, (response) => {
+                    if (response.error) {
+                        console.log('LaunchCamera Error: ', response.error);
+                    }
+                    else {
+                        setImageSource(response.uri);
+                        setModalVisible();
+                        navigation.navigate('Crop');
+                    }
+                });
+            };
+
+            const showCameraRoll = () => {
+                ImagePicker.launchImageLibrary(options, (response) => {
+                    if (response.error) {
+                        console.log('LaunchImageLibrary Error: ', response.error);
+                    }
+                    else {
+                        setImageSource(response.uri);
+                        setModalVisible();
+                        navigation.navigate('Crop');
+                    }
+                });
+            };
 
 
     return (
@@ -25,9 +66,25 @@ function CropImage({navigation}) {
                 </View>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 30, marginTop: 50}}>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}} onPress={setModalVisible}>
                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>다시 선택하기</Text>
                 </TouchableOpacity>
+                <Modal isVisible={isModalVisible} onRequestClose={setModalVisible} hasBackdrop={false} style={{alignItems:'center', elevation: 5}}>
+                    <View
+                    style={{alignItems:'center', justifyContent: 'center', backgroundColor: '#ffffff',
+                    borderRadius: 20, paddingVertical: 25, paddingHorizontal: 20,
+                    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5}}>
+                        <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색할 화장품 사진 가져오기</Text>
+                        <View style={{flexDirection: 'row', paddingTop: 10}}>
+                            <TouchableOpacity style={{alignItems:'center', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 15, margin: 10}} onPress={showCameraRoll}>
+                                <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>불러오기</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 15, margin: 10}} onPress={showCamera}>
+                                <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>새로찍기</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
                 <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={() => navigation.navigate('Detail')}>
                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>분석 하기</Text>
                 </TouchableOpacity>
