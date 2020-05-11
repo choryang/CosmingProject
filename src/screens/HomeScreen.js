@@ -4,7 +4,6 @@ import React, { useState } from 'react';
  import { createStackNavigator } from '@react-navigation/stack';
  import Modal from 'react-native-modal';
  import ImagePicker from 'react-native-image-picker';
- import { Fonts } from '../Font'
 
  function HomeScreen({navigation}) {
 

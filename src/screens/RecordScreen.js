@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
+import CommonModal from './CommonModal';
 
 const DATA = [
   {
@@ -46,58 +47,47 @@ const DATA = [
 
 ];
 
+
+
 function RecordScreen({navigation}) {
+
+    const Item = ({name, costype, opendate, duedate, time}) => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLikeVisible, setIsLikeVisible] = useState(false);
     const [isDeleteVisible, setIsDeleteVisible] = useState(false);
 
     const setModalVisible = () => {
-        setIsModalVisible(!isModalVisible);
+      setIsModalVisible(!isModalVisible);
     }
     const setLikeVisible = () => {
-        setIsLikeVisible(!isLikeVisible);
+      setIsLikeVisible(!isLikeVisible);
     }
     const setDeleteVisible = () => {
-        setIsDeleteVisible(!isDeleteVisible);
+      setIsDeleteVisible(!isDeleteVisible);
     }
 
-    const Item = ({name, costype, opendate, duedate, time}) => {
-      return (
+    return (
         <View style={styles.item}>
-          <TouchableOpacity style={{flex:1.5, alignItems: 'center'}} onPress={() => navigation.navigate('Detail')}>
+            <TouchableOpacity style={{flex:1.5, alignItems: 'center'}} onPress={() => navigation.navigate('Detail')}>
             <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
-          </TouchableOpacity>
-          <View style={{flex:2}}>
-            <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 날짜  </Text><Text style={styles.textcos}>{opendate}</Text></View>
-            <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 시간  </Text><Text style={styles.textcos}>{time}</Text></View>
-          </View>
-          <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
-            <TouchableOpacity onPress={setLikeVisible}>
-              <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
             </TouchableOpacity>
-            <Modal isVisible={isLikeVisible} onRequestClose={setLikeVisible} hasBackdrop={false} style={{alignItems:'center', elevation: 5}}>
-                <View
-                style={{alignItems:'center', justifyContent: 'center', backgroundColor: '#ffffff',
-                borderRadius: 20, paddingVertical: 25, paddingHorizontal: 20,
-                shadowColor: '#555', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2, elevation: 5}}>
-                    <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>내 서랍에 저장</Text>
-                </View>
-            </Modal>
-            <TouchableOpacity onPress={setDeleteVisible}>
-              <Image style={{height: 20, resizeMode: 'contain'}} source={require('../images/deleterecord.png')} />
-            </TouchableOpacity>
-            <Modal isVisible={isDeleteVisible} onRequestClose={setDeleteVisible} hasBackdrop={false} style={{alignItems:'center', elevation: 5}}>
-                <View
-                style={{alignItems:'center', justifyContent: 'center', backgroundColor: '#ffffff',
-                borderRadius: 20, paddingVertical: 25, paddingHorizontal: 20,
-                shadowColor: '#555', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2, elevation: 5}}>
-                    <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>삭제되었습니다.</Text>
-                </View>
-            </Modal>
-          </View>
+            <View style={{flex:2}}>
+                <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 날짜  </Text><Text style={styles.textcos}>{opendate}</Text></View>
+                <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 시간  </Text><Text style={styles.textcos}>{time}</Text></View>
+            </View>
+            <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
+                <TouchableOpacity onPress={setLikeVisible}>
+                    {{isLikeVisible} && <CommonModal isLikeVisible = {isLikeVisible} onLikeClose = {setLikeVisible}/>}
+                    <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={setDeleteVisible}>
+                    {{isDeleteVisible} && <CommonModal isDeleteVisible = {isDeleteVisible} onDeleteClose = {setDeleteVisible}/>}
+                    <Image style={{height: 20, resizeMode: 'contain'}} source={require('../images/deleterecord.png')} />
+                </TouchableOpacity>
+            </View>
         </View>
-      );
+    );
     }
 
     return (
