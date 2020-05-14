@@ -13,11 +13,11 @@ import React, { useState } from 'react';
         setIsModalVisible(!isModalVisible);
     }
 
-    const [imageSource, setImageSource] = useState('.');
+//    const [imageSource, setImageSource] = useState('.');
         const options = {
             title: 'Load Photo',
             storageOptions: {
-            path: 'propose',
+            path: 'cosming',
             },
         };
 
@@ -27,9 +27,14 @@ import React, { useState } from 'react';
                     console.log('LaunchCamera Error: ', response.error);
                 }
                 else {
-                    setImageSource(response.uri);
+//                    setImageSource(response.uri);
+                    if(response.uri){
+                        navigation.navigate('Crop', {dataUri: response.uri});
+                    }
+                    else {
+                        navigation.navigate('Home');
+                    }
                     setModalVisible();
-                    navigation.navigate('Crop');
                 }
             });
         };
@@ -40,9 +45,14 @@ import React, { useState } from 'react';
                     console.log('LaunchImageLibrary Error: ', response.error);
                 }
                 else {
-                    setImageSource(response.uri);
+//                    setImageSource(response.uri);
+                    if(response.uri){
+                        navigation.navigate('Crop', {dataUri: response.uri});
+                    }
+                    else {
+                        navigation.navigate('Home');
+                    }
                     setModalVisible();
-                    navigation.navigate('Crop');
                 }
             });
         };

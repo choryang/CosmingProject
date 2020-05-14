@@ -2,20 +2,34 @@ import React, {useState} from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-picker';
+import ImgToBase64 from 'react-native-image-base64';
 
-function CropImage({navigation}) {
+function CropImage({route, navigation}) {
 
      const [isModalVisible, setIsModalVisible] = useState(false);
+     const { dataUri } = route.params;
+
+     const URL = "https://b12841e405a34032b6a5fd63f068b23d.apigw.ntruss.com/custom/v1/1615/eada0214517a4a0bf4b65aaed4d9146974afa129efd07030d26e13f63bba3638/general"
+
+     const KEY = "VklxeHJhUldVRWdUdE5SeWNDdVFzWmNyZ1NuYVRUWkg="
+
+     let img = dataUri;
+     let enc;
+     ImgToBase64.getBase64String(img)
+       .then(base64String => {enc = base64String})
+       .catch(err => console.log(err));
+     console.log(enc);
+
 
         const setModalVisible = () => {
             setIsModalVisible(!isModalVisible);
         }
 
-        const [imageSource, setImageSource] = useState('.');
+//        const [imageSource, setImageSource] = useState('.');
             const options = {
                 title: 'Load Photo',
                 storageOptions: {
-                path: 'propose',
+                path: 'cosming',
                 },
             };
 
@@ -25,9 +39,14 @@ function CropImage({navigation}) {
                         console.log('LaunchCamera Error: ', response.error);
                     }
                     else {
-                        setImageSource(response.uri);
+//                        setImageSource(response.uri);
+                        if(response.uri){
+                            navigation.navigate('Crop', {dataUri: response.uri});
+                        }
+                        else {
+                            navigation.navigate('Home');
+                        }
                         setModalVisible();
-                        navigation.navigate('Crop');
                     }
                 });
             };
@@ -38,12 +57,69 @@ function CropImage({navigation}) {
                         console.log('LaunchImageLibrary Error: ', response.error);
                     }
                     else {
-                        setImageSource(response.uri);
+//                        setImageSource(response.uri);
+                        if(response.uri){
+                            navigation.navigate('Crop', {dataUri: response.uri});
+                        }
+                        else {
+                            navigation.navigate('Home');
+                        }
                         setModalVisible();
-                        navigation.navigate('Crop');
                     }
                 });
             };
+
+            const search_OCR = () => {
+
+                fetch(URL,
+                    {
+                        method: 'POST',
+                        headers:
+                        {
+                            "Content-Type": "application/json",
+                            "X-OCR-SECRET": KEY
+                        },
+                        body: JSON.stringify(
+                        {
+                            "version": "V1",
+                            "requestId": "sample_id",
+                            "timestamp": 0,
+                            "images": [
+                                {
+                                    "name": "sample_image",
+                                    "format": "jpg",
+                                    "data": enc
+                                }
+                            ]
+
+                        })
+
+                    })
+                    .then((response) => response.text())
+                    .then((res) =>
+                    {
+                        obj = JSON.parse(res);
+                        var i;
+                        for(i = 1; i < obj.images[0].fields.length; i++){
+                            inputText = obj.images[0].fields[i].inferText;
+                            console.log(inputText);
+                            /*const nextNames = names.concat({
+                              id: nextID,
+                              text: inputText
+                            });
+                            setNames(nextNames);
+                            console.log(inputText);
+                            inputText = '';
+                            setNextID(nextID + 1);*/
+                        }
+
+                    }).catch((error) =>
+                    {
+                        console.error(error);
+
+                    });
+
+                }
 
 
     return (
@@ -57,8 +133,7 @@ function CropImage({navigation}) {
             </View>
             <View style={{flex: 1, justifyContent: 'center', paddingTop: 100}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{width: '30%', resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
-                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>이미지를 준비중입니다.</Text>
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: dataUri}} />
                 </View>
                 <View style={{flex: 0.3, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15}}>
                     <Image style={{height: '20%', resizeMode: 'contain'}} source={require('../images/cropicon.png')} />
@@ -85,7 +160,7 @@ function CropImage({navigation}) {
                         </View>
                     </View>
                 </Modal>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={() => navigation.navigate('Detail')}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={search_OCR}>
                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>분석 하기</Text>
                 </TouchableOpacity>
             </View>
