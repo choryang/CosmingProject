@@ -46,7 +46,7 @@ function MyCosmeticScreen({navigation}) {
     const Item = ({name, costype, opendate, duedate}) => {
       return (
         <View style={styles.item}>
-          <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => navigation.navigate('Detail')}>
+          <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => navigation.navigate('Detail', {screenId: 2, dataUri: "."})}>
             <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
           </TouchableOpacity>
           <View style={{flex:1.5}}>
@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
 //       marginHorizontal: 16,
        shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5,
        backgroundColor: '#ffffff',
-       alignItems: 'center'
+       alignItems: 'center',
+       borderRadius: 2
      },
      title: {
        //borderColor: 'gray',

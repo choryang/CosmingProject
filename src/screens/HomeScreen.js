@@ -13,7 +13,7 @@ import React, { useState } from 'react';
         setIsModalVisible(!isModalVisible);
     }
 
-//    const [imageSource, setImageSource] = useState('.');
+
         const options = {
             title: 'Load Photo',
             storageOptions: {
@@ -25,9 +25,9 @@ import React, { useState } from 'react';
             ImagePicker.launchCamera(options, (response) => {
                 if (response.error) {
                     console.log('LaunchCamera Error: ', response.error);
+
                 }
                 else {
-//                    setImageSource(response.uri);
                     if(response.uri){
                         navigation.navigate('Crop', {dataUri: response.uri});
                     }
@@ -43,9 +43,9 @@ import React, { useState } from 'react';
             ImagePicker.launchImageLibrary(options, (response) => {
                 if (response.error) {
                     console.log('LaunchImageLibrary Error: ', response.error);
+
                 }
                 else {
-//                    setImageSource(response.uri);
                     if(response.uri){
                         navigation.navigate('Crop', {dataUri: response.uri});
                     }
@@ -71,10 +71,10 @@ import React, { useState } from 'react';
                     </TouchableOpacity>
                     <Modal isVisible={isModalVisible} onRequestClose={setModalVisible} hasBackdrop={false} style={{alignItems:'center', elevation: 5}}>
                         <View
-                        style={{alignItems:'center', justifyContent: 'center', backgroundColor: '#ffffff',
-                        borderRadius: 20, paddingVertical: 25, paddingHorizontal: 20,
+                        style={{justifyContent: 'center', backgroundColor: '#ffffff',
+                        borderRadius: 7, padding: 20,
                         shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5}}>
-                            <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색할 화장품 사진 가져오기</Text>
+                            <Text style={{textAlign: 'center', fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색할 화장품 사진 가져오기</Text>
                             <View style={{flexDirection: 'row', paddingTop: 10}}>
                                 <TouchableOpacity style={{alignItems:'center', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 15, margin: 10}} onPress={showCameraRoll}>
                                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>불러오기</Text>
@@ -83,6 +83,9 @@ import React, { useState } from 'react';
                                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>새로찍기</Text>
                                 </TouchableOpacity>
                             </View>
+                            <TouchableOpacity style={{alignItems: 'flex-end'}} onPress={setModalVisible}>
+                                <Text style={{paddingTop: 10, color: '#236cb5', fontSize: 17, fontWeight: 'bold'}}>취소</Text>
+                            </TouchableOpacity>
                         </View>
                     </Modal>
                     <TouchableOpacity style={{flex: 1, alignItems:'center'}} onPress={() => navigation.navigate('Record')}>

@@ -8,6 +8,8 @@ function CropImage({route, navigation}) {
 
      const [isModalVisible, setIsModalVisible] = useState(false);
      const { dataUri } = route.params;
+     const [array, setArray] = useState([{inferConfidence: "1", inferText: " "}]);
+
 
      const URL = "https://b12841e405a34032b6a5fd63f068b23d.apigw.ntruss.com/custom/v1/1615/eada0214517a4a0bf4b65aaed4d9146974afa129efd07030d26e13f63bba3638/general"
 
@@ -18,14 +20,14 @@ function CropImage({route, navigation}) {
      ImgToBase64.getBase64String(img)
        .then(base64String => {enc = base64String})
        .catch(err => console.log(err));
-     console.log(enc);
+
+
 
 
         const setModalVisible = () => {
             setIsModalVisible(!isModalVisible);
         }
 
-//        const [imageSource, setImageSource] = useState('.');
             const options = {
                 title: 'Load Photo',
                 storageOptions: {
@@ -39,7 +41,6 @@ function CropImage({route, navigation}) {
                         console.log('LaunchCamera Error: ', response.error);
                     }
                     else {
-//                        setImageSource(response.uri);
                         if(response.uri){
                             navigation.navigate('Crop', {dataUri: response.uri});
                         }
@@ -57,7 +58,6 @@ function CropImage({route, navigation}) {
                         console.log('LaunchImageLibrary Error: ', response.error);
                     }
                     else {
-//                        setImageSource(response.uri);
                         if(response.uri){
                             navigation.navigate('Crop', {dataUri: response.uri});
                         }
@@ -99,19 +99,8 @@ function CropImage({route, navigation}) {
                     .then((res) =>
                     {
                         obj = JSON.parse(res);
-                        var i;
-                        for(i = 1; i < obj.images[0].fields.length; i++){
-                            inputText = obj.images[0].fields[i].inferText;
-                            console.log(inputText);
-                            /*const nextNames = names.concat({
-                              id: nextID,
-                              text: inputText
-                            });
-                            setNames(nextNames);
-                            console.log(inputText);
-                            inputText = '';
-                            setNextID(nextID + 1);*/
-                        }
+                        setArray(obj.images[0].fields);
+                        navigation.navigate('Detail');
 
                     }).catch((error) =>
                     {
@@ -135,7 +124,7 @@ function CropImage({route, navigation}) {
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
                     <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: dataUri}} />
                 </View>
-                <View style={{flex: 0.3, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15}}>
+                <View style={{flex: 0.3, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15, borderRadius: 2}}>
                     <Image style={{height: '20%', resizeMode: 'contain'}} source={require('../images/cropicon.png')} />
                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 12}}>인식할 부분을 찾아 이미지를 잘라 주세요</Text>
                 </View>
@@ -160,7 +149,7 @@ function CropImage({route, navigation}) {
                         </View>
                     </View>
                 </Modal>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={search_OCR}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={() => navigation.navigate('Detail', {screenId: 0, dataUri: dataUri})}>
                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>분석 하기</Text>
                 </TouchableOpacity>
             </View>
