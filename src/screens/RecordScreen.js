@@ -78,7 +78,7 @@ function RecordScreen({navigation}) {
             </View>
             <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
                 <TouchableOpacity onPress={setLikeVisible}>
-                    {{isLikeVisible} && <CommonModal isLikeVisible = {isLikeVisible} onLikeClose = {setLikeVisible}/>}
+                    {{isLikeVisible} && <CommonModal isLikeVisible = {isLikeVisible}/>}
                     <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={setDeleteVisible}>

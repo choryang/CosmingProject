@@ -11,9 +11,10 @@ import InfoScreen from './InfoScreen';
 import LoginScreen from './LoginScreen';
 import ResultDetail from './ResultDetail';
 import CropImage from './CropImage';
+import SearchModal from './SearchModal';
 
 const Stack = createStackNavigator();
-
+const ModalStack = createStackNavigator();
 
 function App() {
 
@@ -35,6 +36,7 @@ return (
             <Stack.Screen name="Info" component={InfoScreen}/>
             <Stack.Screen name="Detail" component={ResultDetail}/>
             <Stack.Screen name="Crop" component={CropImage}/>
+            <Stack.Screen name="Search" component={SearchModal}/>
         </Stack.Navigator>
     </NavigationContainer>
 );

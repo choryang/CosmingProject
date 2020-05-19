@@ -40,6 +40,7 @@ function CropImage({route, navigation}) {
         const cropImage = () => {
                 ImagePicker.openCropper({
                   path: croppedImage,
+                  cropperToolbarColor: '#ffffff',
                   freeStyleCropEnabled: true
                 }).then(image => {
                    setCroppedImage(image.path);
@@ -110,10 +111,14 @@ function CropImage({route, navigation}) {
                 </TouchableOpacity>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 30, marginTop: 50}}>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff',
+                borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}}
+                onPress={() => navigation.push('Search')}>
                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>다시 선택하기</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={() => navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage})}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac',
+                borderRadius: 10, padding: 8, margin: 10}}
+                onPress={() => navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage})}>
                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>분석 하기</Text>
                 </TouchableOpacity>
             </View>
