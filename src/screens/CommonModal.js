@@ -16,8 +16,8 @@ function CommonModal(props) {
         </Modal>
         <Modal isVisible={props.isDeleteVisible} onRequestClose={props.onDeleteClose} hasBackdrop={false} style={{alignItems: 'center'}}>
             <View
-            style={{width: '100%', justifyContent: 'center', backgroundColor: '#ffffff',
-            borderRadius: 7, padding: 20, width: '100%',
+            style={{justifyContent: 'center', backgroundColor: '#ffffff',
+            borderRadius: 7, padding: 20,
             shadowColor: '#550', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2, elevation: 5}}>
                 <Text style={{textAlign:'center', fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색 기록이 삭제되었습니다.</Text>
                 <TouchableOpacity style={{alignItems: 'flex-end'}} onPress={props.onDeleteClose}>

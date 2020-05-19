@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
-import ImagePicker from 'react-native-image-picker';
+//import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import ImgToBase64 from 'react-native-image-base64';
 
 function CropImage({route, navigation}) {
 
-     const [isModalVisible, setIsModalVisible] = useState(false);
      const { dataUri } = route.params;
+     const [croppedImage, setCroppedImage] = useState(dataUri);
+     const [isModalVisible, setIsModalVisible] = useState(false);
      const [array, setArray] = useState([{inferConfidence: "1", inferText: " "}]);
 
 
@@ -35,38 +37,14 @@ function CropImage({route, navigation}) {
                 },
             };
 
-        const showCamera = () => {
-                ImagePicker.launchCamera(options, (response) => {
-                    if (response.error) {
-                        console.log('LaunchCamera Error: ', response.error);
-                    }
-                    else {
-                        if(response.uri){
-                            navigation.navigate('Crop', {dataUri: response.uri});
-                        }
-                        else {
-                            navigation.navigate('Home');
-                        }
-                        setModalVisible();
-                    }
-                });
-            };
-
-            const showCameraRoll = () => {
-                ImagePicker.launchImageLibrary(options, (response) => {
-                    if (response.error) {
-                        console.log('LaunchImageLibrary Error: ', response.error);
-                    }
-                    else {
-                        if(response.uri){
-                            navigation.navigate('Crop', {dataUri: response.uri});
-                        }
-                        else {
-                            navigation.navigate('Home');
-                        }
-                        setModalVisible();
-                    }
-                });
+        const cropImage = () => {
+                ImagePicker.openCropper({
+                  path: croppedImage,
+                  freeStyleCropEnabled: true
+                }).then(image => {
+                   setCroppedImage(image.path);
+                  console.log(image);
+                }).catch((error) => {});
             };
 
             const search_OCR = () => {
@@ -122,34 +100,20 @@ function CropImage({route, navigation}) {
             </View>
             <View style={{flex: 1, justifyContent: 'center', paddingTop: 100}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: dataUri}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: croppedImage}} />
                 </View>
-                <View style={{flex: 0.3, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15, borderRadius: 2}}>
-                    <Image style={{height: '20%', resizeMode: 'contain'}} source={require('../images/cropicon.png')} />
-                    <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 12}}>인식할 부분을 찾아 이미지를 잘라 주세요</Text>
-                </View>
+                <TouchableOpacity style={{flex: 0.3, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15, borderRadius: 2}}
+                onPress={cropImage}
+                >
+                        <Image style={{height: '20%', resizeMode: 'contain'}} source={require('../images/cropicon.png')} />
+                        <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 12}}>이미지를 편집하려면 여기를 클릭하세요</Text>
+                </TouchableOpacity>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 30, marginTop: 50}}>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}} onPress={setModalVisible}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}}>
                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>다시 선택하기</Text>
                 </TouchableOpacity>
-                <Modal isVisible={isModalVisible} onRequestClose={setModalVisible} hasBackdrop={false} style={{alignItems:'center', elevation: 5}}>
-                    <View
-                    style={{alignItems:'center', justifyContent: 'center', backgroundColor: '#ffffff',
-                    borderRadius: 20, paddingVertical: 25, paddingHorizontal: 20,
-                    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5}}>
-                        <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색할 화장품 사진 가져오기</Text>
-                        <View style={{flexDirection: 'row', paddingTop: 10}}>
-                            <TouchableOpacity style={{alignItems:'center', borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 15, margin: 10}} onPress={showCameraRoll}>
-                                <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>불러오기</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 15, margin: 10}} onPress={showCamera}>
-                                <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>새로찍기</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
-                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={() => navigation.navigate('Detail', {screenId: 0, dataUri: dataUri})}>
+                <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac', borderRadius: 10, padding: 8, margin: 10}} onPress={() => navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage})}>
                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>분석 하기</Text>
                 </TouchableOpacity>
             </View>

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
  import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
- import { NavigationContainer } from '@react-navigation/native';
- import { createStackNavigator } from '@react-navigation/stack';
  import Modal from 'react-native-modal';
  import ImagePicker from 'react-native-image-picker';
 
@@ -108,31 +106,5 @@ import React, { useState } from 'react';
     );
 
  }
-
- const styles = StyleSheet.create({
-     Container: {
-       flex: 1,
-       alignItems: 'center',
-       justifyContent: 'center',
-     },
-
-     Photo: {
-       width: 200,
-       height: 200,
-       borderRadius: 8,
-     },
-
-     ImagePickerButton: {
-       borderWidth: 1,
-       borderRadius: 8,
-       borderColor: '#CCCCCC',
-       paddingVertical: 8,
-       paddingHorizontal: 32,
-       marginTop: 16,
-     }
-
- });
-
-
 
  export default HomeScreen;
