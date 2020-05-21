@@ -1,157 +1,53 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
-
-const Data = [
-
-    {
-        id: "1",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "2",
-        name: "세테아릴알코올",
-        purpose: "3, 4, 5",
-        ewg: "2",
-        data: "none"
-    },
-    {
-        id: "3",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "4",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "5",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "6",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "7",
-        name: "세테아릴알코올",
-        purpose: "3, 4, 5",
-        ewg: "2",
-        data: "none"
-    },
-    {
-        id: "8",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "9",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "10",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "11",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "12",
-        name: "세테아릴알코올",
-        purpose: "3, 4, 5",
-        ewg: "2",
-        data: "none"
-    },
-    {
-        id: "13",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "14",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "15",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "16",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "17",
-        name: "세테아릴알코올",
-        purpose: "3, 4, 5",
-        ewg: "2",
-        data: "none"
-    },
-    {
-        id: "18",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "19",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-    {
-        id: "20",
-        name: "세테아릴알코올",
-        purpose: "1, 2",
-        ewg: "2",
-        data: "limit"
-    },
-];
-
+import { openDatabase } from 'react-native-sqlite-storage';
+//Connction to access the pre-populated user_db.db
+var db = openDatabase({ name: 'cosmigTest.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
 
     const{ screenId } = route.params;
     const { dataUri } = route.params;
+    const { Data } = route.params;
+    var FItems = [];
+    var where;
 
-    const Item = ({id, name, ewg}) => {
+    useEffect(() => {
+        if(screenId == 0) {
+            where = 'ing_name';
+        }
+        else {
+            where = 'ing_id';
+        }
+
+        var sql = 'SELECT ing_id, ing_name, ing_purpose FROM ing where ' + where + ' in (';
+        for(let i = 0; i < Data.length - 1; i++){
+            sql = sql + '?,';
+        }
+        sql = sql + '?)';
+        console.log(sql);
+
+        db.transaction(tx => {
+            tx.executeSql(
+                sql, Data,
+                (tx, results) => {
+                    var len = results.rows.length;
+                    console.log('len', len);
+                    if (len > 0) {
+                        for (let i = 0; i < len; ++i) {
+                        FItems.push(results.rows.item(i));
+                    }
+                    //setFlatListItems(tempArray);
+
+                    } else {
+                        alert('No user found');
+                    }
+                }
+            );
+        });
+    }, []);
+
+    const Item = ({id, name, purpose}) => {
         return (
             <View style={styles.itemList}>
                 <View style={{flex: 1, alignItems:'center'}}>
@@ -161,7 +57,7 @@ function ResultDetail({route, navigation}) {
                     <Text style={styles.text}>{name}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{flex: 1.5, alignItems:'center'}}>
-                    <Text style={styles.text}>{ewg}</Text>
+                    <Text style={styles.text}>{purpose}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -220,9 +116,9 @@ function ResultDetail({route, navigation}) {
                 <View style={styles.itemContainer}>
                    <ListHeader />
                    <FlatList
-                        data={Data}
-                        renderItem={({ item }) => <Item id={item.id} name={item.name} ewg={item.ewg}/>}
-                        keyExtractor={item => item.id}
+                        data={FItems}
+                        renderItem={({ item }) => <Item id={item.ing_id} name={item.ing_name} purpose={item.ing_purpose}/>}
+                        keyExtractor={(item, index) => item.id}
                    />
                 </View>
             </View>

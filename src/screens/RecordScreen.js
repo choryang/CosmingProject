@@ -53,16 +53,9 @@ function RecordScreen({navigation}) {
 
     const Item = ({name, costype, opendate, duedate, time}) => {
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isLikeVisible, setIsLikeVisible] = useState(false);
     const [isDeleteVisible, setIsDeleteVisible] = useState(false);
 
-    const setModalVisible = () => {
-      setIsModalVisible(!isModalVisible);
-    }
-    const setLikeVisible = () => {
-      setIsLikeVisible(!isLikeVisible);
-    }
+
     const setDeleteVisible = () => {
       setIsDeleteVisible(!isDeleteVisible);
     }
