@@ -7,7 +7,7 @@ function InfoScreen({navigation}) {
 
     const [isVisible1, setIsVisible1] = useState(0);
 
-    const setVisible1 = (e) => {
+    const setVisible1 = () => {
       if (isVisible1 != 1){
         setIsVisible1(1);
       }

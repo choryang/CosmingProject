@@ -77,8 +77,7 @@ function RecordScreen({navigation}) {
                 <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 시간  </Text><Text style={styles.textcos}>{time}</Text></View>
             </View>
             <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
-                <TouchableOpacity onPress={setLikeVisible}>
-                    {{isLikeVisible} && <CommonModal isLikeVisible = {isLikeVisible}/>}
+                <TouchableOpacity onPress={() => navigation.navigate('Like')}>
                     <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={setDeleteVisible}>

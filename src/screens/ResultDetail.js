@@ -209,9 +209,13 @@ function ResultDetail({route, navigation}) {
                         <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 13}}>제품유형</Text>
                         <Text style={{ color: '#035eac', fontSize: 13}}> 00000   </Text>
                     </View>}
+                     {(screenId == 2) ?
                     <TouchableOpacity>
-                        <Image style={{width: 20, resizeMode: 'contain'}} source={(screenId == 2) ? require('../images/likeselect.png') : require('../images/likeIcon.png')} />
-                    </TouchableOpacity>
+                        <Image style={{width: 20, resizeMode: 'contain'}} source={require('../images/likeselect.png')}/>
+                    </TouchableOpacity> :
+                    <TouchableOpacity  onPress={() => navigation.push('Like')}>
+                        <Image style={{width: 20, resizeMode: 'contain'}} source={require('../images/likeIcon.png')} />
+                    </TouchableOpacity>}
                 </View>
                 <View style={styles.itemContainer}>
                    <ListHeader />

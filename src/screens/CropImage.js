@@ -40,8 +40,8 @@ function CropImage({route, navigation}) {
         const cropImage = () => {
                 ImagePicker.openCropper({
                   path: croppedImage,
-                  cropperToolbarColor: '#ffffff',
-                  freeStyleCropEnabled: true
+                  cropperToolbarColor: '#ffffff', // 안드로이드
+                  freeStyleCropEnabled: true // 안드로이드
                 }).then(image => {
                    setCroppedImage(image.path);
                   console.log(image);
@@ -79,7 +79,10 @@ function CropImage({route, navigation}) {
                     {
                         obj = JSON.parse(res);
                         setArray(obj.images[0].fields);
-                        navigation.navigate('Detail');
+                        for(var i = 0; i < obj.images[0].fields.length; i++){
+                            console.log(obj.images[0].fields[i].boundingPoly.vertices[2].x);
+                        }
+                        //navigation.navigate('Detail');
 
                     }).catch((error) =>
                     {
@@ -113,12 +116,12 @@ function CropImage({route, navigation}) {
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 30, marginTop: 50}}>
                 <TouchableOpacity style={{alignItems:'center', backgroundColor: '#ffffff',
                 borderRadius: 10, borderColor: '#035eac', borderWidth: 1, padding: 8, margin: 10}}
-                onPress={() => navigation.push('Search')}>
+                onPress={() => navigation.navigate('Search')}>
                     <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>다시 선택하기</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{alignItems:'center', backgroundColor: '#035eac',
                 borderRadius: 10, padding: 8, margin: 10}}
-                onPress={() => navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage})}>
+                onPress={search_OCR}>
                     <Text style={{fontWeight: 'bold', color: '#ffffff', fontSize: 20}}>분석 하기</Text>
                 </TouchableOpacity>
             </View>
