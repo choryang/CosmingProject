@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function MyCosmeticScreen({navigation}) {
 
     var FItems = [];
 
+
     useEffect(() => {
 
-            var sql = 'SELECT name FROM board where like = 1';
+            var sql = 'SELECT name, ing_ids FROM board where like = 1';
 
             db.transaction(tx => {
                 tx.executeSql(
@@ -18,7 +19,7 @@ function MyCosmeticScreen({navigation}) {
                     (tx, results) => {
                         var len = results.rows.length;
                         console.log('len', len);
-                        if (len > 0) {
+                        if (len) {
                             for (let i = 0; i < len; ++i) {
                                 FItems.push(results.rows.item(i));
                             }
@@ -33,10 +34,21 @@ function MyCosmeticScreen({navigation}) {
 
        }, []);
 
-    const Item = ({name}) => {
+    const Item = ({name, ing_ids}) => {
+
+
+     const ingData = () => {
+         var ings = [];
+        var temp = ing_ids.split(" ");
+        for(i = 0; i < temp.length; i++){
+            ings.push(temp[i]);
+        }
+
+        navigation.navigate('Detail', {screenId: 2, dataUri: ".", Data: ings});
+     }
       return (
         <View style={styles.item}>
-          <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => navigation.navigate('Detail', {screenId: 2, dataUri: "."})}>
+          <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={ingData}>
             <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
           </TouchableOpacity>
           <View style={{flex:1.5}}>
@@ -68,7 +80,7 @@ function MyCosmeticScreen({navigation}) {
 
                   <FlatList
                     data={FItems}
-                    renderItem={({ item }) => <Item name={item.name}/>}
+                    renderItem={({ item }) => <Item name={item.name} ing_ids={item.ing_ids}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connction to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
 
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 
     itemContainer: {
         flex: 1.5,
-        paddingVertical: 20,
+        paddingBottom: 20,
         marginBottom: 10,
         shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5,
         backgroundColor: '#ffffff',
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     },
 
     itemList: {
-        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -161,11 +160,10 @@ const styles = StyleSheet.create({
     },
 
     listHeader: {
-            flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            paddingBottom: 15,
+            paddingVertical: 5,
             marginHorizontal: 15,
             borderColor: '#00000029',
             borderBottomWidth: 1

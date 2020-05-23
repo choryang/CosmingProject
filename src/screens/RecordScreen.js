@@ -4,15 +4,17 @@ import Modal from 'react-native-modal';
 import CommonModal from './CommonModal';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function RecordScreen({navigation}) {
 
     var FItems = [];
 
+
+
     useEffect(() => {
 
-            var sql = 'SELECT b_id, search_date, search_time FROM board where like = 0';
+            var sql = 'SELECT b_id, search_date, search_time, ing_ids FROM board where like = 0';
 
             db.transaction(tx => {
                 tx.executeSql(
@@ -33,20 +35,44 @@ function RecordScreen({navigation}) {
 
             });
 
-       }, []);
-
-    const Item = ({b_id, sDate, sTime}) => {
-
-        const [isDeleteVisible, setIsDeleteVisible] = useState(false);
+   }, []);
 
 
-        const setDeleteVisible = () => {
-          setIsDeleteVisible(!isDeleteVisible);
+
+    const Item = ({b_id, sDate, sTime, ing_ids}) => {
+
+        const ingData = () => {
+            var ings = [];
+            var temp = ing_ids.split(" ");
+            for(i = 0; i < temp.length; i++){
+                ings.push(temp[i]);
+            }
+            console.log(ings);
+            navigation.navigate('Detail', {screenId: 1, dataUri: ".", Data: ings});
         }
+
+        deleteBoard = () => {
+            db.transaction(tx => {
+              tx.executeSql(
+                'DELETE FROM board where b_id=?',
+                [b_id],
+                (tx, results) => {
+                  console.log('Results', results.rowsAffected);
+                  if (results.rowsAffected) {
+                    alert('검색기록이 삭제되었습니다.');
+                  } else {
+                    alert('삭제를 실패하였습니다. 다시 시도해주세요.');
+                  }
+                }
+              );
+            });
+          };
+
+
 
         return (
             <View style={styles.item}>
-                <TouchableOpacity style={{flex:1.5, alignItems: 'center'}} onPress={() => navigation.navigate('Detail', {screenId: 1, dataUri: "."})}>
+                <TouchableOpacity style={{flex:1.5, alignItems: 'center'}} onPress={ingData}>
                 <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
                 </TouchableOpacity>
                 <View style={{flex:2}}>
@@ -57,8 +83,7 @@ function RecordScreen({navigation}) {
                     <TouchableOpacity onPress={() => navigation.navigate('Like', {id: b_id})}>
                         <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={setDeleteVisible}>
-                        {{isDeleteVisible} && <CommonModal isDeleteVisible = {isDeleteVisible} onDeleteClose = {setDeleteVisible}/>}
+                    <TouchableOpacity onPress={deleteBoard}>
                         <Image style={{height: 20, resizeMode: 'contain'}} source={require('../images/deleterecord.png')} />
                     </TouchableOpacity>
                 </View>
@@ -83,7 +108,7 @@ function RecordScreen({navigation}) {
 
                   <FlatList
                     data={FItems}
-                    renderItem={({ item }) => <Item b_id={item.b_id} sDate={item.search_date} sTime={item.search_time}/>}
+                    renderItem={({ item }) => <Item b_id={item.b_id} sDate={item.search_date} sTime={item.search_time} ing_ids={item.ing_ids}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />
 

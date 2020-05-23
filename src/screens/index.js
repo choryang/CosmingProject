@@ -28,11 +28,10 @@ function App() {
 
 return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login"  headerMode="none">
+        <Stack.Navigator initialRouteName="Home"  headerMode="none">
             <Stack.Screen name="Search" component={SearchModal} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
             <Stack.Screen name="Like" component={LikeModal} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
             <Stack.Screen name="Home" component={HomeScreen}/>
-            <Stack.Screen name="Login" component={LoginScreen}/>
             <Stack.Screen name="Record" component={RecordScreen}/>
             <Stack.Screen name="MyCosmetic" component={MyCosmeticScreen}/>
             <Stack.Screen name="Info" component={InfoScreen}/>

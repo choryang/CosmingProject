@@ -2,30 +2,27 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function LikeModal({route, navigation}) {
 
-    const [value, onChangeText] = useState('제품이름');
+    const [name, onChangeName] = useState('제품이름');
+    const [type, onChangeType] = useState('제품유형');
     const { id } = route.params;
 
     LikeCos = () => {
         db.transaction((tx)=> {
             console.log(id);
             tx.executeSql(
-                'UPDATE board set name=?, like=1 where b_id=?',
-                [value, id],
+                'UPDATE board set name=?, costype=?, like=1 where b_id=?',
+                [name, type, id],
                 (tx, results) => {
                     console.log('Results',results.rowsAffected);
-                    if(results.rowsAffected>0){
-                        Alert.alert( 'Success', 'User updated successfully',
-                        [
-                        {text: 'Ok', onPress: () => navigation.goBack()},
-                        ],
-                        { cancelable: false }
-                        );
+                    if(results.rowsAffected){
+                        alert('내 서랍에 저장되었습니다.');
+                       navigation.goBack();
                     }else{
-                    alert('Updation Failed');
+                    alert('저장에 실패하였습니다. 다시 시도해주세요.');
                     }
                 }
                 );
@@ -45,8 +42,20 @@ function LikeModal({route, navigation}) {
                     <TextInput
                     style={{width: '100%', borderColor: '#035eac', borderBottomWidth: 2, marginBottom: 15, paddingBottom: 1,
                        fontWeight: 'bold', fontSize: 13, color: '#035eac'}}
-                       onChangeText={text => onChangeText(text)}
+                       onChangeText={text => onChangeName(text)}
                        placeholder={'이름을 입력해주세요'}
+                       textAlign={'left'}
+                       maxLength={10}
+                       placeholderTextColor={'#035eac50'}
+                    />
+                </View>
+                <View>
+                    <Text style={{color: '#035eac', fontSize: 11}}>제품유형</Text>
+                    <TextInput
+                    style={{width: '100%', borderColor: '#035eac', borderBottomWidth: 2, marginBottom: 15, paddingBottom: 1,
+                       fontWeight: 'bold', fontSize: 13, color: '#035eac'}}
+                       onChangeText={text => onChangeType(text)}
+                       placeholder={'제품유형을 입력해주세요'}
                        textAlign={'left'}
                        maxLength={10}
                        placeholderTextColor={'#035eac50'}
