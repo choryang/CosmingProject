@@ -1,85 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import CommonModal from './CommonModal';
-
-const DATA = [
-  {
-    id: '1',
-    name: '핑크 어쩌구 세럼',
-    costype: '제품유형',
-    opendate: '20.02.02',
-    duedate: '22.02.02',
-    time: '17:00'
-  },
-  {
-    id: '2',
-    name: '핑크 어쩌구 세럼',
-    costype: '제품유형',
-    opendate: '20.02.02',
-    duedate: '22.02.02',
-    time: '17:00'
-  },
-  {
-    id: '3',
-    name: '핑크 어쩌구 세럼',
-    costype: '제품유형',
-    opendate: '20.02.02',
-    duedate: '22.02.02',
-    time: '17:00'
-  },
-  {
-      id: '4',
-      name: '핑크 어쩌구 세럼',
-      costype: '제품유형',
-      opendate: '20.02.02',
-      duedate: '22.02.02',
-      time: '17:00'
-    },
-    {
-      id: '5',
-      name: '핑크 어쩌구 세럼',
-      costype: '제품유형',
-      opendate: '20.02.02',
-      duedate: '22.02.02',
-      time: '17:00'
-    },
-
-];
-
-
+import { openDatabase } from 'react-native-sqlite-storage';
+//Connection to access the pre-populated user_db.db
+var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
 
 function RecordScreen({navigation}) {
 
-    const Item = ({name, costype, opendate, duedate, time}) => {
+    var FItems = [];
 
-    const [isDeleteVisible, setIsDeleteVisible] = useState(false);
+    useEffect(() => {
+
+            var sql = 'SELECT b_id, search_date, search_time FROM board where like = 0';
+
+            db.transaction(tx => {
+                tx.executeSql(
+                    sql, [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        console.log('len', len);
+                        if (len > 0) {
+                            for (let i = 0; i < len; ++i) {
+                                FItems.push(results.rows.item(i));
+                            }
+                        } else {
+                            alert('No data found');
+                        }
+
+                    }
+                );
+
+            });
+
+       }, []);
+
+    const Item = ({b_id, sDate, sTime}) => {
+
+        const [isDeleteVisible, setIsDeleteVisible] = useState(false);
 
 
-    const setDeleteVisible = () => {
-      setIsDeleteVisible(!isDeleteVisible);
-    }
+        const setDeleteVisible = () => {
+          setIsDeleteVisible(!isDeleteVisible);
+        }
 
-    return (
-        <View style={styles.item}>
-            <TouchableOpacity style={{flex:1.5, alignItems: 'center'}} onPress={() => navigation.navigate('Detail', {screenId: 1, dataUri: "."})}>
-            <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
-            </TouchableOpacity>
-            <View style={{flex:2}}>
-                <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 날짜  </Text><Text style={styles.textcos}>{opendate}</Text></View>
-                <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 시간  </Text><Text style={styles.textcos}>{time}</Text></View>
-            </View>
-            <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Like')}>
-                    <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
+        return (
+            <View style={styles.item}>
+                <TouchableOpacity style={{flex:1.5, alignItems: 'center'}} onPress={() => navigation.navigate('Detail', {screenId: 1, dataUri: "."})}>
+                <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={setDeleteVisible}>
-                    {{isDeleteVisible} && <CommonModal isDeleteVisible = {isDeleteVisible} onDeleteClose = {setDeleteVisible}/>}
-                    <Image style={{height: 20, resizeMode: 'contain'}} source={require('../images/deleterecord.png')} />
-                </TouchableOpacity>
+                <View style={{flex:2}}>
+                    <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 날짜  </Text><Text style={styles.textcos}>{sDate}</Text></View>
+                    <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 시간  </Text><Text style={styles.textcos}>{sTime}</Text></View>
+                </View>
+                <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Like', {id: b_id})}>
+                        <Image style={{height: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={setDeleteVisible}>
+                        {{isDeleteVisible} && <CommonModal isDeleteVisible = {isDeleteVisible} onDeleteClose = {setDeleteVisible}/>}
+                        <Image style={{height: 20, resizeMode: 'contain'}} source={require('../images/deleterecord.png')} />
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
-    );
+        );
     }
 
     return (
@@ -98,9 +82,9 @@ function RecordScreen({navigation}) {
             <View style={{flex: 1}}>
 
                   <FlatList
-                    data={DATA}
-                    renderItem={({ item }) => <Item name={item.name} costype={item.costype} opendate={item.opendate} duedate={item.duedate} time={item.time}/>}
-                    keyExtractor={item => item.id}
+                    data={FItems}
+                    renderItem={({ item }) => <Item b_id={item.b_id} sDate={item.search_date} sTime={item.search_time}/>}
+                    keyExtractor={(item, index) => index.toString()}
                   />
 
             </View>

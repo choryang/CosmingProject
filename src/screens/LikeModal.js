@@ -1,55 +1,36 @@
 import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
+import { openDatabase } from 'react-native-sqlite-storage';
+//Connection to access the pre-populated user_db.db
+var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
 
-function LikeModal({navigation}) {
+function LikeModal({route, navigation}) {
 
-    const [value, onChangeText] = useState('test');
-    const [isVisible1, setIsVisible1] = useState(0);
+    const [value, onChangeText] = useState('제품이름');
+    const { id } = route.params;
 
-        const setVisible1 = () => {
-          if (isVisible1 != 1){
-            setIsVisible1(1);
-          }
-          else{
-            setIsVisible1(0);
-          }
-        }
-
-        const setVisible2 = () => {
-          if (isVisible1 != 2){
-            setIsVisible1(2);
-          }
-          else{
-            setIsVisible1(0);
-          }
-        }
-
-        const setVisible3 = () => {
-          if (isVisible1 != 3){
-             setIsVisible1(3);
-          }
-          else{
-             setIsVisible1(0);
-          }
-        }
-
-        const setVisible4 = () => {
-          if (isVisible1 != 4){
-             setIsVisible1(4);
-           }
-          else{
-             setIsVisible1(0);
-          }
-        }
-
-        const setVisible5 = () => {
-          if (isVisible1 != 5){
-            setIsVisible1(5);
-          }
-          else{
-            setIsVisible1(0);
-          }
-        }
+    LikeCos = () => {
+        db.transaction((tx)=> {
+            console.log(id);
+            tx.executeSql(
+                'UPDATE board set name=?, like=1 where b_id=?',
+                [value, id],
+                (tx, results) => {
+                    console.log('Results',results.rowsAffected);
+                    if(results.rowsAffected>0){
+                        Alert.alert( 'Success', 'User updated successfully',
+                        [
+                        {text: 'Ok', onPress: () => navigation.goBack()},
+                        ],
+                        { cancelable: false }
+                        );
+                    }else{
+                    alert('Updation Failed');
+                    }
+                }
+                );
+            });
+    }
 
 
     return (
@@ -71,74 +52,11 @@ function LikeModal({navigation}) {
                        placeholderTextColor={'#035eac50'}
                     />
                 </View>
-                <View style={{marginTop: 10}}>
-                    <Text style={{color: '#035eac', fontSize: 11}}>화장품 유형</Text>
-                    <View style={{flexDirection: 'row', width: '100%'}}>
-                        <TouchableOpacity activeOpacity={1} style={(isVisible1 == 1) ? styles.ItemSelect : styles.Item} onPress={setVisible1}>
-                            <Text style={(isVisible1 == 1) ? styles.TextSelect : styles.ItemText}>Hair / Body care</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={(isVisible1 == 2) ? styles.ItemSelect : styles.Item} onPress={setVisible2}>
-                            <Text style={(isVisible1 == 2) ? styles.TextSelect : styles.ItemText}>Skin care</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={(isVisible1 == 3) ? styles.ItemSelect : styles.Item} onPress={setVisible3}>
-                            <Text style={(isVisible1 == 3) ? styles.TextSelect : styles.ItemText}>Sun care</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={{flexDirection: 'row', width: '100%'}}>
-                        <TouchableOpacity activeOpacity={1} style={(isVisible1 == 4) ? styles.ItemSelect : styles.Item} onPress={setVisible4}>
-                            <Text style={(isVisible1 == 4) ? styles.TextSelect : styles.ItemText}>Make up</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={(isVisible1 == 5) ? styles.ItemSelect : styles.Item} onPress={setVisible5}>
-                            <Text style={(isVisible1 == 5) ? styles.TextSelect : styles.ItemText}>Cleansing</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{marginTop: 10}}>
-                    <Text style={{color: '#035eac', fontSize: 11}}>개봉일</Text>
-                    <View style={{flexDirection: 'row', width: '100%'}}>
-                        <TouchableOpacity style={styles.DateItem}>
-                            <Text style={styles.ItemText}>▼</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.DateItem}>
-                            <Text style={styles.ItemText}>▼</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.DateItem}>
-                            <Text style={styles.ItemText}>▼</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{marginTop: 10}}>
-                    <Text style={{color: '#035eac', fontSize: 11}}>사용기한</Text>
-                    <View style={{flexDirection: 'row', width: '100%'}}>
-                        <TouchableOpacity style={styles.DateItem}>
-                            <Text style={styles.ItemText}>▼</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.DateItem}>
-                            <Text style={styles.ItemText}>▼</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.DateItem}>
-                            <Text style={styles.ItemText}>▼</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{marginTop: 10}}>
-                    <Text style={{color: '#035eac', fontSize: 11}}>메모</Text>
-                    <TextInput
-                    style={{width: '100%', borderColor: '#035eac', borderBottomWidth: 2, marginBottom: 15, paddingBottom: 1,
-                    fontWeight: 'bold', fontSize: 13, color: '#035eac'}}
-                    onChangeText={text => onChangeText(text)}
-                    placeholder={'이름을 입력해주세요'}
-                    textAlign={'left'}
-                    maxLength={10}
-                    placeholderTextColor={'#035eac50'}
-                    />
-                </View>
                 <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                     <TouchableOpacity style={{marginRight: 10}} onPress={() => navigation.goBack()}>
                         <Text style={{paddingTop: 10, color: '#236cb5', fontSize: 17, fontWeight: 'bold'}}>취소</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{marginRight: 10}} onPress={() => navigation.goBack()}>
+                    <TouchableOpacity style={{marginRight: 10}} onPress={LikeCos}>
                         <Text style={{paddingTop: 10, color: '#236cb5', fontSize: 17, fontWeight: 'bold'}}>저장</Text>
                     </TouchableOpacity>
                 </View>
@@ -147,6 +65,7 @@ function LikeModal({navigation}) {
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     Item: {

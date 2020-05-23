@@ -1,49 +1,39 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
-
-const DATA = [
-  {
-    id: '1',
-    name: '핑크 어쩌구 세럼',
-    costype: '제품유형',
-    opendate: '20.02.02',
-    duedate: '22.02.02',
-  },
-  {
-    id: '2',
-    name: '핑크 어쩌구 세럼',
-    costype: '제품유형',
-    opendate: '20.02.02',
-    duedate: '22.02.02',
-  },
-  {
-    id: '3',
-    name: '핑크 어쩌구 세럼',
-    costype: '제품유형',
-    opendate: '20.02.02',
-    duedate: '22.02.02',
-  },
-  {
-      id: '4',
-      name: '핑크 어쩌구 세럼',
-      costype: '제품유형',
-      opendate: '20.02.02',
-      duedate: '22.02.02',
-    },
-    {
-      id: '5',
-      name: '핑크 어쩌구 세럼',
-      costype: '제품유형',
-      opendate: '20.02.02',
-      duedate: '22.02.02',
-    },
-
-];
-
+import { openDatabase } from 'react-native-sqlite-storage';
+//Connection to access the pre-populated user_db.db
+var db = openDatabase({ name: 'cosmingTest.db', createFromLocation : 1});
 
 function MyCosmeticScreen({navigation}) {
 
-    const Item = ({name, costype, opendate, duedate}) => {
+    var FItems = [];
+
+    useEffect(() => {
+
+            var sql = 'SELECT name FROM board where like = 1';
+
+            db.transaction(tx => {
+                tx.executeSql(
+                    sql, [],
+                    (tx, results) => {
+                        var len = results.rows.length;
+                        console.log('len', len);
+                        if (len > 0) {
+                            for (let i = 0; i < len; ++i) {
+                                FItems.push(results.rows.item(i));
+                            }
+                        } else {
+                            alert('No data found');
+                        }
+
+                    }
+                );
+
+            });
+
+       }, []);
+
+    const Item = ({name}) => {
       return (
         <View style={styles.item}>
           <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={() => navigation.navigate('Detail', {screenId: 2, dataUri: "."})}>
@@ -51,11 +41,11 @@ function MyCosmeticScreen({navigation}) {
           </TouchableOpacity>
           <View style={{flex:1.5}}>
            <Text style={styles.title}>{name}</Text>
-           <Text style={styles.textcos}>{costype}</Text>
+           <Text style={styles.textcos}>제품유형</Text>
           </View>
-          <View style={{flex:1}}>
-            <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>개봉일  </Text><Text style={styles.text}>{opendate}</Text></View>
-            <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>사용기한  </Text><Text style={styles.text}>{duedate}</Text></View>
+          <View style={{flex:1.3}}>
+            <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>개봉일  </Text><Text style={styles.text}>2020-02-02</Text></View>
+            <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>사용기한  </Text><Text style={styles.text}>2020-02-02</Text></View>
           </View>
         </View>
       );
@@ -77,9 +67,9 @@ function MyCosmeticScreen({navigation}) {
             <View style={{flex: 1}}>
 
                   <FlatList
-                    data={DATA}
-                    renderItem={({ item }) => <Item name={item.name} costype={item.costype} opendate={item.opendate} duedate={item.duedate}/>}
-                    keyExtractor={item => item.id}
+                    data={FItems}
+                    renderItem={({ item }) => <Item name={item.name}/>}
+                    keyExtractor={(item, index) => index.toString()}
                   />
 
             </View>
