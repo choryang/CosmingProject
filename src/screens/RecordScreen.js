@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import CommonModal from './CommonModal';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
 
 function RecordScreen({navigation}) {
 

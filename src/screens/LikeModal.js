@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
 
 function LikeModal({route, navigation}) {
 

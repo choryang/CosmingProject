@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connction to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
 
@@ -26,7 +26,7 @@ function ResultDetail({route, navigation}) {
             sql = sql + '?,';
         }
         sql = sql + '?)';
-        var ing_ids;
+        var ing_ids = "";
 
         db.transaction(tx => {
             tx.executeSql(
@@ -46,8 +46,26 @@ function ResultDetail({route, navigation}) {
             );
 
         });
-
    }, []);
+
+   insertResult = () => {
+        db.transaction(tx => {
+             tx.executeSql(
+               'INSERT INTO board (search_date, search_time, ing_ids, like) VALUES (?,?,?,?)',
+               [date('now','localtime'),time('now','localtime'),ing_ids,0],
+               (tx, results) => {
+                 if (results.rowsAffected > 0) {
+                   alert('You are Registered Successfully');
+                 } else {
+                   alert('Registration Failed');
+                 }
+               }
+             );
+           });
+    }
+
+
+
 
     const Item = ({id, name, purpose}) => {
         return (
