@@ -71,8 +71,10 @@ function CropImage({route, navigation}) {
         {
             obj = JSON.parse(res);
             var tempArray = [];
+            var text = [];
             for(var i = 0; i < obj.images[0].fields.length; i++){
-                tempArray.push(obj.images[0].fields[i].inferText);
+                text = obj.images[0].fields[i].inferText.split(",");
+                tempArray.push(text[0]);
             }
 
             navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage, Data: tempArray})

@@ -12,6 +12,27 @@ function ResultDetail({route, navigation}) {
     var FItems = [];
     var where;
 
+    /*insertResult = () => {
+        console.log('result');
+        db.transaction(tx => {
+            tx.executeSql(
+                'INSERT INTO board (search_date, search_time, ing_ids) VALUES (?,?,?)',
+                 [date('now', 'localtime'), time('now', 'localtime'), '1234'],
+                 (tx, results) => {
+                 console.log('Results', results.rowsAffected);
+                 if (results.rowsAffected > 0) {
+                   alert('You are Registered Successfully');
+                 } else {
+                   alert('Registration Failed');
+
+                 }
+               }
+            );
+        });
+    };*/
+
+
+
     useEffect(() => {
         if(screenId == 0) {
             where = 'ing_name';
@@ -26,6 +47,7 @@ function ResultDetail({route, navigation}) {
         }
         sql = sql + '?)';
         console.log(sql);
+        var ing_ids;
 
         db.transaction(tx => {
             tx.executeSql(
@@ -35,15 +57,15 @@ function ResultDetail({route, navigation}) {
                     console.log('len', len);
                     if (len > 0) {
                         for (let i = 0; i < len; ++i) {
-                        FItems.push(results.rows.item(i));
-                    }
-                    //setFlatListItems(tempArray);
-
+                            FItems.push(results.rows.item(i));
+                        }
                     } else {
-                        alert('No user found');
+                        alert('No data found');
                     }
+
                 }
             );
+
         });
     }, []);
 
@@ -118,7 +140,7 @@ function ResultDetail({route, navigation}) {
                    <FlatList
                         data={FItems}
                         renderItem={({ item }) => <Item id={item.ing_id} name={item.ing_name} purpose={item.ing_purpose}/>}
-                        keyExtractor={(item, index) => item.id}
+                        keyExtractor={(item, index) => index.toString()}
                    />
                 </View>
             </View>
