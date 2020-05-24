@@ -133,10 +133,10 @@ function ResultDetail({route, navigation}) {
         return(
             <View style={styles.listHeader}>
                 <View style={{flex: 1, alignItems:'center'}}>
-                    <Text style={styles.title}>No.</Text>
+                    <Text style={styles.title}>성분코드</Text>
                 </View>
                 <View style={{flex: 3.5, alignItems:'center'}}>
-                    <Text style={styles.title}>name</Text>
+                    <Text style={styles.title}>성분명</Text>
                 </View>
             </View>
         );
