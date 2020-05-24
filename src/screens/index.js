@@ -13,6 +13,7 @@ import ResultDetail from './ResultDetail';
 import CropImage from './CropImage';
 import SearchModal from './SearchModal';
 import LikeModal from './LikeModal';
+import CosWebView from './CosWebView';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ return (
             <Stack.Screen name="Info" component={InfoScreen}/>
             <Stack.Screen name="Detail" component={ResultDetail}/>
             <Stack.Screen name="Crop" component={CropImage}/>
+            <Stack.Screen name="CosWebView" component={CosWebView}/>
         </Stack.Navigator>
     </NavigationContainer>
 );

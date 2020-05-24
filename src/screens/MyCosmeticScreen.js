@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
+var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function MyCosmeticScreen({navigation}) {
 
@@ -24,7 +24,7 @@ function MyCosmeticScreen({navigation}) {
                                 FItems.push(results.rows.item(i));
                             }
                         } else {
-                            alert('No data found');
+                            alert('데이터가 없습니다.');
                         }
 
                     }
@@ -51,13 +51,9 @@ function MyCosmeticScreen({navigation}) {
           <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={ingData}>
             <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
           </TouchableOpacity>
-          <View style={{flex:1.5}}>
+          <View style={{flex:2}}>
            <Text style={styles.title}>{name}</Text>
            <Text style={styles.textcos}>{type}</Text>
-          </View>
-          <View style={{flex:1.3}}>
-            <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>개봉일  </Text><Text style={styles.text}>2020-02-02</Text></View>
-            <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>사용기한  </Text><Text style={styles.text}>2020-02-02</Text></View>
           </View>
         </View>
       );

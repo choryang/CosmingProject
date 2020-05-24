@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
+var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function LikeModal({route, navigation}) {
 
+    const { id } = route.params;
+
+
     const [name, onChangeName] = useState('제품이름');
     const [type, onChangeType] = useState('제품유형');
-    const { id } = route.params;
+
 
     LikeCos = () => {
         db.transaction((tx)=> {
@@ -31,10 +34,9 @@ function LikeModal({route, navigation}) {
 
 
     return (
-        <View style={{flex: 1}}>
-            <View style={{flex: 0.2}}></View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <View
-            style={{ flex: 1, justifyContent: 'center', backgroundColor: '#ffffff',
+            style={{ width: (Dimensions.get('window').width - 40), justifyContent: 'center', backgroundColor: '#ffffff',
             borderRadius: 7, padding: 20, margin: 30,
             shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5}}>
                 <View>
@@ -43,7 +45,7 @@ function LikeModal({route, navigation}) {
                     style={{width: '100%', borderColor: '#035eac', borderBottomWidth: 2, marginBottom: 15, paddingBottom: 1,
                        fontWeight: 'bold', fontSize: 13, color: '#035eac'}}
                        onChangeText={text => onChangeName(text)}
-                       placeholder={'이름을 입력해주세요'}
+                       placeholder={'제품이름을 입력해주세요'}
                        textAlign={'left'}
                        maxLength={10}
                        placeholderTextColor={'#035eac50'}
@@ -70,7 +72,6 @@ function LikeModal({route, navigation}) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{flex: 0.2}}></View>
         </View>
     );
 }

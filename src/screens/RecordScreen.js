@@ -4,12 +4,12 @@ import Modal from 'react-native-modal';
 import CommonModal from './CommonModal';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
+var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function RecordScreen({navigation}) {
 
     var FItems = [];
-
+    var len = 0;
 
 
     useEffect(() => {
@@ -20,14 +20,14 @@ function RecordScreen({navigation}) {
                 tx.executeSql(
                     sql, [],
                     (tx, results) => {
-                        var len = results.rows.length;
+                        len = results.rows.length;
                         console.log('len', len);
                         if (len > 0) {
                             for (let i = 0; i < len; ++i) {
                                 FItems.push(results.rows.item(i));
                             }
                         } else {
-                            alert('No data found');
+                            alert('데이터가 없습니다.');
                         }
 
                     }
@@ -61,7 +61,7 @@ function RecordScreen({navigation}) {
                   if (results.rowsAffected) {
                     alert('검색기록이 삭제되었습니다.');
                   } else {
-                    alert('삭제를 실패하였습니다. 다시 시도해주세요.');
+                    alert('삭제에 실패하였습니다. 다시 시도해주세요.');
                   }
                 }
               );
@@ -109,7 +109,7 @@ function RecordScreen({navigation}) {
                   <FlatList
                     data={FItems}
                     renderItem={({ item }) => <Item b_id={item.b_id} sDate={item.search_date} sTime={item.search_time} ing_ids={item.ing_ids}/>}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item, index) => item.b_id.toString()}
                   />
 
             </View>
@@ -154,7 +154,7 @@ titleText: {
  },
  textcos: {
      color: '#035eac',
-     fontSize: 13,
+     fontSize: 15,
   },
  textbold: {
          color: '#035eac',

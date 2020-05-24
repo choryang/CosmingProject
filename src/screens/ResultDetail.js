@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, BackHandler } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connction to access the pre-populated user_db.db
-var db = openDatabase({ name: 'cosData.db', createFromLocation : 1});
+var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
 
@@ -11,9 +11,13 @@ function ResultDetail({route, navigation}) {
     const { Data } = route.params;
     var FItems = [];
     var where;
+    var ing_ids = "";
+
+
 
 
     useEffect(() => {
+
         if(screenId == 0) {
             where = 'ing_name';
         }
@@ -26,18 +30,34 @@ function ResultDetail({route, navigation}) {
             sql = sql + '?,';
         }
         sql = sql + '?)';
-        var ing_ids = "";
 
         db.transaction(tx => {
             tx.executeSql(
                 sql, Data,
                 (tx, results) => {
                     var len = results.rows.length;
-                    console.log('len', len);
                     if (len > 0) {
                         for (let i = 0; i < len; ++i) {
                             FItems.push(results.rows.item(i));
+                            ing_ids = ing_ids + results.rows.item(i).ing_id + " ";
                         }
+                        if(screenId == 0){
+                            var sRecord = new Date();
+                            var sDate = sRecord.getFullYear() + "-" + (sRecord.getMonth() + 1) + "-" + sRecord.getDate();
+                            var sTime = sRecord.getHours() + ":" + sRecord.getMinutes() + ":" + sRecord.getSeconds();
+                            tx.executeSql(
+                               'INSERT INTO board (search_date, search_time, name, costype, ing_ids) VALUES (?,?,?,?,?)',
+                               [sDate,sTime,' ',' ',ing_ids],
+                               (tx, results) => {
+                                 console.log('insert result');
+                                 if (results.rowsAffected > 0) {
+                                   alert('검색기록이 저장되었습니다.');
+                                 } else {
+                                   alert('검색기록 저장에 실패하였습니다. 다시 시도해주세요.');
+                                 }
+                               }
+                             );
+                         }
                     } else {
                         alert('No data found');
                     }
@@ -45,25 +65,14 @@ function ResultDetail({route, navigation}) {
                 }
             );
 
+
+
         });
+
    }, []);
 
 
-   /*insertResult = () => {
-        db.transaction(tx => {
-             tx.executeSql(
-               'INSERT INTO board (search_date, search_time, ing_ids, like) VALUES (?,?,?,?)',
-               [date('now','localtime'),time('now','localtime'),ing_ids,0],
-               (tx, results) => {
-                 if (results.rowsAffected > 0) {
-                   alert('You are Registered Successfully');
-                 } else {
-                   alert('Registration Failed');
-                 }
-               }
-             );
-           });
-    }*/
+
 
 
 
@@ -105,7 +114,6 @@ function ResultDetail({route, navigation}) {
                     purposeStr = purposeStr + "";
             }
         }
-        console.log(purposeStr);
         return (
             <View>
                 <View style={styles.itemList}>
@@ -167,13 +175,15 @@ function ResultDetail({route, navigation}) {
                         <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 13}}>제품유형</Text>
                         <Text style={{ color: '#035eac', fontSize: 13}}> 00000   </Text>
                     </View>}
-                     {(screenId == 2) ?
+                     {(screenId == 2) &&
                     <TouchableOpacity>
                         <Image style={{width: 20, resizeMode: 'contain'}} source={require('../images/likeselect.png')}/>
-                    </TouchableOpacity> :
+                    </TouchableOpacity>}
+                     {(screenId == 1) &&
                     <TouchableOpacity  onPress={() => navigation.push('Like')}>
                         <Image style={{width: 20, resizeMode: 'contain'}} source={require('../images/likeIcon.png')} />
                     </TouchableOpacity>}
+                    {(screenId == 0) && <View style={{height: 30}}></View>}
                 </View>
                 <View style={styles.itemContainer}>
                    <ListHeader />
