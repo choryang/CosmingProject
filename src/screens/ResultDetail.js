@@ -48,7 +48,8 @@ function ResultDetail({route, navigation}) {
         });
    }, []);
 
-   insertResult = () => {
+
+   /*insertResult = () => {
         db.transaction(tx => {
              tx.executeSql(
                'INSERT INTO board (search_date, search_time, ing_ids, like) VALUES (?,?,?,?)',
@@ -62,7 +63,7 @@ function ResultDetail({route, navigation}) {
                }
              );
            });
-    }
+    }*/
 
 
 

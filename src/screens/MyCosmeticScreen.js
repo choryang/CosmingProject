@@ -11,7 +11,7 @@ function MyCosmeticScreen({navigation}) {
 
     useEffect(() => {
 
-            var sql = 'SELECT name, ing_ids FROM board where like = 1';
+            var sql = 'SELECT name, costype, ing_ids FROM board where like = 1';
 
             db.transaction(tx => {
                 tx.executeSql(
@@ -34,7 +34,7 @@ function MyCosmeticScreen({navigation}) {
 
        }, []);
 
-    const Item = ({name, ing_ids}) => {
+    const Item = ({name, type, ing_ids}) => {
 
 
      const ingData = () => {
@@ -53,7 +53,7 @@ function MyCosmeticScreen({navigation}) {
           </TouchableOpacity>
           <View style={{flex:1.5}}>
            <Text style={styles.title}>{name}</Text>
-           <Text style={styles.textcos}>제품유형</Text>
+           <Text style={styles.textcos}>{type}</Text>
           </View>
           <View style={{flex:1.3}}>
             <View style={{flexDirection: 'row'}}><Text style={styles.textbold}>개봉일  </Text><Text style={styles.text}>2020-02-02</Text></View>
@@ -80,7 +80,7 @@ function MyCosmeticScreen({navigation}) {
 
                   <FlatList
                     data={FItems}
-                    renderItem={({ item }) => <Item name={item.name} ing_ids={item.ing_ids}/>}
+                    renderItem={({ item }) => <Item name={item.name} type={item.costype} ing_ids={item.ing_ids}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />
 
