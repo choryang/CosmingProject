@@ -69,17 +69,61 @@ function ResultDetail({route, navigation}) {
 
 
     const Item = ({id, name, purpose}) => {
+        var str = [];
+        var purposeStr = "";
+        str = purpose.split(" ");
+        for(let i = 0; i < str.length; i++){
+            switch(str[i]){
+                case "1":
+                    purposeStr = purposeStr + "보습효과  ";
+                    break;
+                case "2":
+                    purposeStr = purposeStr + "유화제  ";
+                    break;
+                case "3":
+                    purposeStr = purposeStr + "세정효과  ";
+                    break;
+                case "4":
+                    purposeStr = purposeStr + "사용감개선  ";
+                    break;
+                case "5":
+                    purposeStr = purposeStr + "보존제  ";
+                    break;
+                case "6":
+                    purposeStr = purposeStr + "색소  ";
+                    break;
+                case "7":
+                    purposeStr = purposeStr + "기능성원료  ";
+                    break;
+                case "8":
+                    purposeStr = purposeStr + "향료  ";
+                    break;
+                case "9":
+                    purposeStr = purposeStr + "기타  ";
+                    break;
+                default :
+                    purposeStr = purposeStr + "";
+            }
+        }
+        console.log(purposeStr);
         return (
-            <View style={styles.itemList}>
-                <View style={{flex: 1, alignItems:'center'}}>
-                    <Text style={styles.title}>{id}</Text>
+            <View>
+                <View style={styles.itemList}>
+                    <View style={{flex: 1, alignItems:'center'}}>
+                        <Text style={styles.title}>{id}</Text>
+                    </View>
+                    <View style={{flex: 3.5, alignItems:'center'}}>
+                        <Text style={styles.text}>{name}</Text>
+                    </View>
                 </View>
-                <TouchableOpacity style={{flex: 3.5, alignItems:'center'}}>
-                    <Text style={styles.text}>{name}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{flex: 1.5, alignItems:'center'}}>
-                    <Text style={styles.text}>{purpose}</Text>
-                </TouchableOpacity>
+                <View style={styles.itemPurpose}>
+                    <View style={{flex: 1, alignItems:'center'}}>
+                        <Text style={styles.title}>효능/효과 : </Text>
+                    </View>
+                    <View style={{flex: 3.5, alignItems:'center'}}>
+                        <Text style={styles.text}>{purposeStr}</Text>
+                    </View>
+                </View>
             </View>
         );
     }
@@ -93,9 +137,6 @@ function ResultDetail({route, navigation}) {
                 </View>
                 <View style={{flex: 3.5, alignItems:'center'}}>
                     <Text style={styles.title}>name</Text>
-                </View>
-                <View style={{flex: 1.5, alignItems:'center'}}>
-                    <Text style={styles.title}>value</Text>
                 </View>
             </View>
         );
@@ -173,9 +214,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 3,
-        marginHorizontal: 15,
+        marginHorizontal: 5,
+
+    },
+
+    itemPurpose: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 3,
+        marginHorizontal: 5,
         borderColor: '#00000029',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        backgroundColor: '#b0c1e821'
     },
 
     listHeader: {
@@ -183,7 +234,7 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             justifyContent: 'center',
             paddingVertical: 5,
-            marginHorizontal: 15,
+            marginHorizontal: 5,
             borderColor: '#00000029',
             borderBottomWidth: 1
         },
