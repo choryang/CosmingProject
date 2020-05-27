@@ -82,25 +82,34 @@ function CropImage({route, navigation}) {
                 for(var i = 0; i < obj.images[0].fields.length; i++){
                     text = obj.images[0].fields[i].inferText.split(",");
                     nextX = obj.images[0].fields[i].boundingPoly.vertices[2].x;
-                    if(text.length > 2){// 성분명 중간에 ,가 있는 경우
-                        text.pop();
+                    if(text.length > 2){// 성분명 중간에 ,가 있는 경우(ex. 1,2-헥산다이올)
+                        text.pop();//마지막은 빈칸이라서
                         nextText = text.join();
                         tempArray.push(nextText);
                     }
                     else{
                         nextText = text[0].trim();
-                        tempArray.push(nextText);//끝에만 ,가 있는 완전한 성분명 & 줄바뀜 성분명
-                        console.log(nextText);
+                        tempArray.push(nextText);//끝에만 ,가 있는 완전한 성분명
                     }
 
                     if(prevX > nextX){ // 줄바뀜이 있을 때
-                        tempArray.pop();
-                        nextText = previousText + nextText;
-                        tempArray.push(nextText);
+                        var sql = 'SELECT ing_id FROM ing where ing_name=?'
+                            db.executeSql(
+                                sql, [nextText],
+                                (tx, results) => {
+                                    console.log('실행1');
+                                    var len = results.rows.length;
+                                        tempArray.pop();
+                                        nextText = previousText + nextText;
+                                        tempArray.push(nextText);
+                                        console.log('실행2');
+                                }
+                            );
                     }
                     prevX = nextX;
                     previousText = nextText;
                 }
+                console.log(tempArray);
 
             navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage, Data: tempArray});
 
