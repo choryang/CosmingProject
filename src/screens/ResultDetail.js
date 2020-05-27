@@ -9,6 +9,9 @@ function ResultDetail({route, navigation}) {
     const{ screenId } = route.params;
     const { dataUri } = route.params;
     const { Data } = route.params;
+    const { cosname } = route.params;
+    const { costype } = route.params;
+
     var FItems = [];
     var where;
     var ing_ids = "";
@@ -167,23 +170,15 @@ function ResultDetail({route, navigation}) {
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
                     <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: dataUri}} />
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: (screenId == 2) ? 'space-between' : 'flex-end'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     {(screenId == 2) &&
                     <View style={{flexDirection: 'row'}}>
                         <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 13}}>제품명</Text>
-                        <Text style={{ color: '#035eac', fontSize: 13}}> 어쩌구 크림   </Text>
+                        <Text style={{ color: '#035eac', fontSize: 13}}> {cosname}   </Text>
                         <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 13}}>제품유형</Text>
-                        <Text style={{ color: '#035eac', fontSize: 13}}> 00000   </Text>
+                        <Text style={{ color: '#035eac', fontSize: 13}}> {costype}   </Text>
                     </View>}
-                     {(screenId == 2) &&
-                    <TouchableOpacity>
-                        <Image style={{width: 20, resizeMode: 'contain'}} source={require('../images/likeselect.png')}/>
-                    </TouchableOpacity>}
-                     {(screenId == 1) &&
-                    <TouchableOpacity  onPress={() => navigation.push('Like')}>
-                        <Image style={{width: 20, resizeMode: 'contain'}} source={require('../images/likeIcon.png')} />
-                    </TouchableOpacity>}
-                    {(screenId == 0) && <View style={{height: 30}}></View>}
+                    <View style={{height: 30}}></View>
                 </View>
                 <View style={styles.itemContainer}>
                    <ListHeader />

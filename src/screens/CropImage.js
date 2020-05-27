@@ -4,6 +4,9 @@ import Modal from 'react-native-modal';
 //import ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImgToBase64 from 'react-native-image-base64';
+import { openDatabase } from 'react-native-sqlite-storage';
+//Connection to access the pre-populated user_db.db
+var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 
 function CropImage({route, navigation}) {
@@ -17,7 +20,7 @@ function CropImage({route, navigation}) {
 
      const KEY = "VklxeHJhUldVRWdUdE5SeWNDdVFzWmNyZ1NuYVRUWkg="
 
-     let img = dataUri;
+     let img = croppedImage;
      let enc;
      ImgToBase64.getBase64String(img)
        .then(base64String => {enc = base64String})
@@ -70,15 +73,36 @@ function CropImage({route, navigation}) {
         .then((res) =>
         {
             obj = JSON.parse(res);
-            var tempArray = [];
-            var text = [];
-            for(var i = 0; i < obj.images[0].fields.length; i++){
-                text = obj.images[0].fields[i].inferText.split(",");
-                tempArray.push(text[0]);
-                console.log(text[0]);
-            }
+                var tempArray = [];
+                var text = [];
+                var nextText;
+                var previousText = ".";
+                var nextX = 0;
+                var prevX = 0;
+                for(var i = 0; i < obj.images[0].fields.length; i++){
+                    text = obj.images[0].fields[i].inferText.split(",");
+                    nextX = obj.images[0].fields[i].boundingPoly.vertices[2].x;
+                    if(text.length > 2){// 성분명 중간에 ,가 있는 경우
+                        text.pop();
+                        nextText = text.join();
+                        tempArray.push(nextText);
+                    }
+                    else{
+                        nextText = text[0].trim();
+                        tempArray.push(nextText);//끝에만 ,가 있는 완전한 성분명 & 줄바뀜 성분명
+                        console.log(nextText);
+                    }
 
-            navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage, Data: tempArray})
+                    if(prevX > nextX){ // 줄바뀜이 있을 때
+                        tempArray.pop();
+                        nextText = previousText + nextText;
+                        tempArray.push(nextText);
+                    }
+                    prevX = nextX;
+                    previousText = nextText;
+                }
+
+            navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage, Data: tempArray});
 
         }).catch((error) =>
         {

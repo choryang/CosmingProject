@@ -8,8 +8,9 @@ function MyCosmeticScreen({navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
 
-   const fetchLike = () => {
 
+    useEffect(() =>
+    {
         var len = 0;
         var FItems = [];//임시배열
 
@@ -31,12 +32,9 @@ function MyCosmeticScreen({navigation}) {
 
                 }
             );
+        })
 
-        });
-
-   }
-
-    useEffect(() => fetchLike(), []);
+    }, []);
 
     const Item = ({b_id, name, type, ing_ids}) => {
 
@@ -48,7 +46,7 @@ function MyCosmeticScreen({navigation}) {
             ings.push(temp[i]);
         }
 
-        navigation.navigate('Detail', {screenId: 2, dataUri: ".", Data: ings});
+        navigation.navigate('Detail', {screenId: 2, dataUri: ".", Data: ings, cosname: name, costype: type});
      }
 
      deleteBoard = () => {

@@ -12,7 +12,8 @@ function RecordScreen({navigation}) {
     const [refresh, setRefresh] = useState(false);
 
 
-    const fetchRecord = () => {
+    useEffect(() =>
+    {
         var len = 0;
         var FItems = []; // 임시 배열
 
@@ -34,13 +35,8 @@ function RecordScreen({navigation}) {
 
                 }
             );
-
-        });
-
-   }
-
-
-    useEffect(() => fetchRecord(), []);
+        })
+    }, []);
 
     const Item = ({b_id, sDate, sTime, ing_ids}) => {
 
@@ -51,7 +47,7 @@ function RecordScreen({navigation}) {
                 ings.push(temp[i]);
             }
             console.log(ings);
-            navigation.navigate('Detail', {screenId: 1, dataUri: ".", Data: ings});
+            navigation.navigate('Detail', {screenId: 1, dataUri: ".", Data: ings, cosname: " ", costype: " "});
         }
 
         deleteBoard = () => {
@@ -69,7 +65,6 @@ function RecordScreen({navigation}) {
                 }
               );
             });
-
 
       };
 
@@ -108,17 +103,15 @@ function RecordScreen({navigation}) {
                 </TouchableOpacity>
             </View>
             <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 5}}>
-                <Image style={{marginTop: 5, height: '50%', width: '15%', resizeMode: 'contain'}} source={require('../images/recordlarge.png')} />
-                <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>검색 기록</Text>
+                <Image style={{marginTop: 5, height: '35%', width: '15%', resizeMode: 'contain'}} source={require('../images/recordlarge.png')} />
+                <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingTop: 3}}>검색 기록</Text>
             </View>
             <View style={{flex: 1}}>
-
                   <FlatList
                     data={FlatListItems}
                     renderItem={({ item }) => <Item b_id={item.b_id} sDate={item.search_date} sTime={item.search_time} ing_ids={item.ing_ids}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />
-
             </View>
         </View>
     );
