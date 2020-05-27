@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 //import ImagePicker from 'react-native-image-picker';
@@ -11,20 +11,24 @@ var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function CropImage({route, navigation}) {
 
-     const { dataUri } = route.params;
-     const [croppedImage, setCroppedImage] = useState(dataUri);
-     const [array, setArray] = useState([]);
+    const { dataUri } = route.params;
+    const [croppedImage, setCroppedImage] = useState(dataUri);
+    const [array, setArray] = useState([]);
+    const [enc, setEnc] = useState(".");
 
+    const URL = "https://b12841e405a34032b6a5fd63f068b23d.apigw.ntruss.com/custom/v1/1615/eada0214517a4a0bf4b65aaed4d9146974afa129efd07030d26e13f63bba3638/general"
 
-     const URL = "https://b12841e405a34032b6a5fd63f068b23d.apigw.ntruss.com/custom/v1/1615/eada0214517a4a0bf4b65aaed4d9146974afa129efd07030d26e13f63bba3638/general"
+    const KEY = "VklxeHJhUldVRWdUdE5SeWNDdVFzWmNyZ1NuYVRUWkg="
 
-     const KEY = "VklxeHJhUldVRWdUdE5SeWNDdVFzWmNyZ1NuYVRUWkg="
+    useEffect(() => {
 
-     let img = croppedImage;
-     let enc;
-     ImgToBase64.getBase64String(img)
-       .then(base64String => {enc = base64String})
-       .catch(err => console.log(err));
+        let img = croppedImage;
+        ImgToBase64.getBase64String(img)
+        .then(base64String => {setEnc(base64String); console.log(typeof(enc));})
+        .catch(err => console.log(err));
+
+    },[croppedImage]);
+
 
     const options = {
         title: 'Load Photo',
@@ -91,27 +95,16 @@ function CropImage({route, navigation}) {
                         nextText = text[0].trim();
                         tempArray.push(nextText);//끝에만 ,가 있는 완전한 성분명
                     }
-
                     if(prevX > nextX){ // 줄바뀜이 있을 때
-                        var sql = 'SELECT ing_id FROM ing where ing_name=?'
-                            db.executeSql(
-                                sql, [nextText],
-                                (tx, results) => {
-                                    console.log('실행1');
-                                    var len = results.rows.length;
-                                        tempArray.pop();
-                                        nextText = previousText + nextText;
-                                        tempArray.push(nextText);
-                                        console.log('실행2');
-                                }
-                            );
+                        tempArray.pop();
+                        nextText = previousText + nextText;
+                        tempArray.push(nextText);
                     }
                     prevX = nextX;
                     previousText = nextText;
                 }
-                console.log(tempArray);
 
-            navigation.navigate('Detail', {screenId: 0, dataUri: croppedImage, Data: tempArray});
+            navigation.navigate('Detail', {screenId: 0, dataUri: enc, Data: tempArray});
 
         }).catch((error) =>
         {
@@ -125,7 +118,7 @@ function CropImage({route, navigation}) {
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
             <View style={{flex: 1, justifyContent: 'center', paddingTop: 100}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: croppedImage}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+enc}} />
                 </View>
                 <TouchableOpacity style={{flex: 0.2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15, borderRadius: 2}}
                 onPress={cropImage}
@@ -152,3 +145,4 @@ function CropImage({route, navigation}) {
 }
 
 export default CropImage;
+

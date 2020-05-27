@@ -168,7 +168,7 @@ function ResultDetail({route, navigation}) {
             </View>
             <View style={{flex: 1}}>
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: dataUri}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+dataUri}} />
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     {(screenId == 2) &&
