@@ -6,35 +6,39 @@ var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function MyCosmeticScreen({navigation}) {
 
-    var FItems = [];
+    const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
 
+   const fetchLike = () => {
 
-    useEffect(() => {
+        var len = 0;
+        var FItems = [];//임시배열
 
-            var sql = 'SELECT name, costype, ing_ids FROM board where like = 1';
-
-            db.transaction(tx => {
-                tx.executeSql(
-                    sql, [],
-                    (tx, results) => {
-                        var len = results.rows.length;
-                        console.log('len', len);
-                        if (len) {
-                            for (let i = 0; i < len; ++i) {
-                                FItems.push(results.rows.item(i));
-                            }
-                        } else {
-                            alert('데이터가 없습니다.');
+        var sql = 'SELECT b_id, name, costype, ing_ids FROM board where like = 1';
+        db.transaction(tx => {
+            tx.executeSql(
+                sql, [],
+                (tx, results) => {
+                    len = results.rows.length;
+                    console.log('len', len);
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            FItems.push(results.rows.item(i));
                         }
-
+                        setFlatListItems(FItems);
+                    } else {
+                        alert('데이터가 없습니다.');
                     }
-                );
 
-            });
+                }
+            );
 
-       }, []);
+        });
 
-    const Item = ({name, type, ing_ids}) => {
+   }
+
+    useEffect(() => fetchLike(), []);
+
+    const Item = ({b_id, name, type, ing_ids}) => {
 
 
      const ingData = () => {
@@ -46,6 +50,24 @@ function MyCosmeticScreen({navigation}) {
 
         navigation.navigate('Detail', {screenId: 2, dataUri: ".", Data: ings});
      }
+
+     deleteBoard = () => {
+         db.transaction(tx => {
+           tx.executeSql(
+             'DELETE FROM board where b_id=?',
+             [b_id],
+             (tx, results) => {
+               console.log('Results', results.rowsAffected);
+               if (results.rowsAffected) {
+                 alert(name +'이 삭제되었습니다.');
+               } else {
+                 alert('삭제에 실패하였습니다. 다시 시도해주세요.');
+               }
+             }
+           );
+         });
+       };
+
       return (
         <View style={styles.item}>
           <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={ingData}>
@@ -54,6 +76,14 @@ function MyCosmeticScreen({navigation}) {
           <View style={{flex:2}}>
            <Text style={styles.title}>{name}</Text>
            <Text style={styles.textcos}>{type}</Text>
+          </View>
+          <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
+              <TouchableOpacity>
+                  <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/likeselect.png')} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={deleteBoard}>
+                  <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/deleterecord.png')} />
+              </TouchableOpacity>
           </View>
         </View>
       );
@@ -75,8 +105,8 @@ function MyCosmeticScreen({navigation}) {
             <View style={{flex: 1}}>
 
                   <FlatList
-                    data={FItems}
-                    renderItem={({ item }) => <Item name={item.name} type={item.costype} ing_ids={item.ing_ids}/>}
+                    data={FlatListItems}
+                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />
 

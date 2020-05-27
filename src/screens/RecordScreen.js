@@ -8,36 +8,39 @@ var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
 
 function RecordScreen({navigation}) {
 
-    var FItems = [];
-    var len = 0;
+    const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
+    const [refresh, setRefresh] = useState(false);
 
 
-    useEffect(() => {
+    const fetchRecord = () => {
+        var len = 0;
+        var FItems = []; // 임시 배열
 
-            var sql = 'SELECT b_id, search_date, search_time, ing_ids FROM board where like = 0';
-
-            db.transaction(tx => {
-                tx.executeSql(
-                    sql, [],
-                    (tx, results) => {
-                        len = results.rows.length;
-                        console.log('len', len);
-                        if (len > 0) {
-                            for (let i = 0; i < len; ++i) {
-                                FItems.push(results.rows.item(i));
-                            }
-                        } else {
-                            alert('데이터가 없습니다.');
+        var sql = 'SELECT b_id, search_date, search_time, ing_ids FROM board where like = 0';
+        db.transaction(tx => {
+            tx.executeSql(
+                sql, [],
+                (tx, results) => {
+                    len = results.rows.length;
+                    console.log('len', len)
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            FItems.push(results.rows.item(i));
                         }
-
+                        setFlatListItems(FItems);
+                    } else {
+                        alert('데이터가 없습니다.');
                     }
-                );
 
-            });
+                }
+            );
 
-   }, []);
+        });
+
+   }
 
 
+    useEffect(() => fetchRecord(), []);
 
     const Item = ({b_id, sDate, sTime, ing_ids}) => {
 
@@ -66,7 +69,11 @@ function RecordScreen({navigation}) {
                 }
               );
             });
-          };
+
+
+      };
+
+
 
 
 
@@ -107,9 +114,9 @@ function RecordScreen({navigation}) {
             <View style={{flex: 1}}>
 
                   <FlatList
-                    data={FItems}
+                    data={FlatListItems}
                     renderItem={({ item }) => <Item b_id={item.b_id} sDate={item.search_date} sTime={item.search_time} ing_ids={item.ing_ids}/>}
-                    keyExtractor={(item, index) => item.b_id.toString()}
+                    keyExtractor={(item, index) => index.toString()}
                   />
 
             </View>
@@ -132,9 +139,7 @@ titleText: {
    flex: 1,
    flexDirection: 'row',
    paddingVertical: 15,
-//       paddingTop: 0,
    marginVertical: 10,
-//       marginHorizontal: 16,
    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5,
    backgroundColor: '#ffffff',
    alignItems: 'center',

@@ -37,7 +37,7 @@ function ResultDetail({route, navigation}) {
                 (tx, results) => {
                     var len = results.rows.length;
                     if (len > 0) {
-                        for (let i = 0; i < len; ++i) {
+                        for (let i = 0; i < len; i++) {
                             FItems.push(results.rows.item(i));
                             ing_ids = ing_ids + results.rows.item(i).ing_id + " ";
                         }
