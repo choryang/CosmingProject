@@ -17,7 +17,6 @@ function LikeModal({route, navigation}) {
 
     LikeCos = () => {
             db.transaction((tx)=> {
-                console.log(id);
                 tx.executeSql(
                     'UPDATE board set name=?, costype=?, like=1 where b_id=?',
                     [name, type, id],
@@ -26,20 +25,21 @@ function LikeModal({route, navigation}) {
                         if(results.rowsAffected){
                             if( screenId == 1 ){
                                 alert('내 서랍에 저장되었습니다.');
+                                navigation.navigate('Record', {refresh: name + type});
                             }
                             else {
-                                if(name != cosname && type != costype){
+                                if(name != cosname || type != costype){
                                     alert('수정되었습니다.');
                                 }
+                                navigation.navigate('MyCosmetic', {refresh: name + type});
                             }
-                            navigation.goBack();
-                        }else{
+                        } else{
                             alert('저장에 실패하였습니다. 다시 시도해주세요.');
                             navigation.goBack();
                         }
                     }
-                    );
-                });
+                );
+            });
     }
 
 

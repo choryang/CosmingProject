@@ -5,10 +5,9 @@ import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
 var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
-function MyCosmeticScreen({navigation}) {
+function MyCosmeticScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
-    const [refresh, setRefresh] = useState(false);
 
     useEffect(() =>
     {
@@ -33,7 +32,7 @@ function MyCosmeticScreen({navigation}) {
         });
 
 
-    }, [refresh]);
+    }, [route.params?.refresh]);
 
     const Item = ({b_id, name, type, ing_ids, img}) => {
 
@@ -59,10 +58,10 @@ function MyCosmeticScreen({navigation}) {
            <Text style={styles.textcos}>{type}</Text>
           </View>
           <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('Like', {id: b_id, cosname: name, costype: type, screenId: 2})}>
+              <TouchableOpacity onPress={() => {navigation.navigate('Like', {id: b_id, cosname: name, costype: type, screenId: 2})}}>
                   <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/modiname.png')} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Delete', {id: b_id})}>
+              <TouchableOpacity onPress={() => navigation.navigate('Delete', {id: b_id, screenId: 2})}>
                   <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/deleterecord.png')} />
               </TouchableOpacity>
           </View>
@@ -74,7 +73,7 @@ function MyCosmeticScreen({navigation}) {
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
             <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 5}}>
-                <Image style={{marginTop: 5, height: '60%', width: '10%', resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
+                <Image style={{marginTop: 5, height: 30, width: 30, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                 <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>내 서랍</Text>
             </View>
             <View style={{flex: 1}}>

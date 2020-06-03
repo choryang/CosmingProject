@@ -6,10 +6,9 @@ import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
 var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
-function RecordScreen({navigation}) {
+function RecordScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
-    const [refresh, setRefresh] = useState(false);
 
 
 
@@ -36,7 +35,7 @@ function RecordScreen({navigation}) {
         });
 
 
-    }, [refresh]);
+    }, [route.params?.refresh]);
 
     const Item = ({b_id, sDate, sTime, ing_ids, img}) => {
 
@@ -80,8 +79,8 @@ function RecordScreen({navigation}) {
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
             <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 5}}>
-                <Image style={{marginTop: 5, height: '35%', width: '15%', resizeMode: 'contain'}} source={require('../images/recordlarge.png')} />
-                <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingTop: 3}}>검색 기록</Text>
+                <Image style={{marginTop: 5, height: 20, width: 30, resizeMode: 'contain'}} source={require('../images/recordlarge.png')} />
+                <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingTop: 3, paddingLeft: 5}}>검색 기록</Text>
             </View>
             <View style={{flex: 1}}>
 

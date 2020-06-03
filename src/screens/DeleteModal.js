@@ -7,6 +7,8 @@ var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 function DeleteModal({route, navigation}) {
 
     const { id } = route.params;
+    const { screenId } = route.params;
+    var rand = Math.random();
 
     deleteBoard = () => {
         db.transaction(tx => {
@@ -17,7 +19,12 @@ function DeleteModal({route, navigation}) {
                 console.log('Results', results.rowsAffected);
                 if (results.rowsAffected) {
                     alert('삭제되었습니다.');
-                    navigation.goBack();
+                    if(screenId == 1){
+                        navigation.navigate('Record', {refresh: rand});
+                    }
+                    else {
+                        navigation.navigate('MyCosmetic', {refresh: rand});
+                    }
                 } else {
                     alert('삭제에 실패하였습니다. 다시 시도해주세요.');
                     navigation.goBack();
