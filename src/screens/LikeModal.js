@@ -13,7 +13,7 @@ function LikeModal({route, navigation}) {
 
     const [name, onChangeName] = useState(cosname);
     const [type, onChangeType] = useState(costype);
-
+    var rand = Math.random();
 
     LikeCos = () => {
             db.transaction((tx)=> {
@@ -25,13 +25,13 @@ function LikeModal({route, navigation}) {
                         if(results.rowsAffected){
                             if( screenId == 1 ){
                                 alert('내 서랍에 저장되었습니다.');
-                                navigation.navigate('Record', {refresh: name + type});
+                                navigation.navigate('Record', {refresh: rand});
                             }
                             else {
                                 if(name != cosname || type != costype){
                                     alert('수정되었습니다.');
                                 }
-                                navigation.navigate('MyCosmetic', {refresh: name + type});
+                                navigation.navigate('MyCosmetic', {refresh: rand});
                             }
                         } else{
                             alert('저장에 실패하였습니다. 다시 시도해주세요.');
