@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-
+import Header from './Header';
 
 function InfoScreen({navigation}) {
 
@@ -39,13 +39,7 @@ function InfoScreen({navigation}) {
 
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
-            <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingTop: 20}}>
-                <Image style={{marginTop: 7, height: '80%', width: '30%', resizeMode: 'contain'}} source={require('../images/homelogo.png')} />
-                <Image style={{marginTop: 20, height: '80%', width: '50%', resizeMode: 'contain'}} source={require('../images/hometext.png')} />
-                <TouchableOpacity style={{flex: 1}} onPress={() => navigation.navigate('Home')}>
-                    <Image style={{marginTop: 5, height: '110%', width: '110%', resizeMode: 'contain'}} source={require('../images/homelarge.png')} />
-                </TouchableOpacity>
-            </View>
+            <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 5}}>
                 <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>?  도움말</Text>
             </View>

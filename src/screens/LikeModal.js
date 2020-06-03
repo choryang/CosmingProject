@@ -2,34 +2,44 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
+var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
 function LikeModal({route, navigation}) {
 
     const { id } = route.params;
+    const { cosname } = route.params;
+    const { costype } = route.params;
+    const { screenId } = route.params;
 
-
-    const [name, onChangeName] = useState('제품이름');
-    const [type, onChangeType] = useState('제품유형');
+    const [name, onChangeName] = useState(cosname);
+    const [type, onChangeType] = useState(costype);
 
 
     LikeCos = () => {
-        db.transaction((tx)=> {
-            console.log(id);
-            tx.executeSql(
-                'UPDATE board set name=?, costype=?, like=1 where b_id=?',
-                [name, type, id],
-                (tx, results) => {
-                    console.log('Results',results.rowsAffected);
-                    if(results.rowsAffected){
-                        alert('내 서랍에 저장되었습니다.');
-                       navigation.goBack();
-                    }else{
-                    alert('저장에 실패하였습니다. 다시 시도해주세요.');
+            db.transaction((tx)=> {
+                console.log(id);
+                tx.executeSql(
+                    'UPDATE board set name=?, costype=?, like=1 where b_id=?',
+                    [name, type, id],
+                    (tx, results) => {
+                        console.log('Results',results.rowsAffected);
+                        if(results.rowsAffected){
+                            if( screenId == 1 ){
+                                alert('내 서랍에 저장되었습니다.');
+                            }
+                            else {
+                                if(name != cosname && type != costype){
+                                    alert('수정되었습니다.');
+                                }
+                            }
+                            navigation.goBack();
+                        }else{
+                            alert('저장에 실패하였습니다. 다시 시도해주세요.');
+                            navigation.goBack();
+                        }
                     }
-                }
-                );
-            });
+                    );
+                });
     }
 
 

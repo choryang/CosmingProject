@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import Header from './Header';
 import Modal from 'react-native-modal';
 //import ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImgToBase64 from 'react-native-image-base64';
-import { openDatabase } from 'react-native-sqlite-storage';
+//import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
+//var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
 
 function CropImage({route, navigation}) {
@@ -116,6 +117,7 @@ function CropImage({route, navigation}) {
 
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
+            <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{flex: 1, justifyContent: 'center', paddingTop: 100}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
                     <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+enc}} />

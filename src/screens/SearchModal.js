@@ -47,10 +47,9 @@ function SearchModal({navigation}) {
         };
 
     return (
-        <View style={{flex: 1}}>
-            <View style={{flex: 1}}></View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <View
-            style={{ flex: 0.7, justifyContent: 'center', backgroundColor: '#ffffff',
+            style={{ width: (Dimensions.get('window').width - 70), justifyContent: 'center', backgroundColor: '#ffffff',
             borderRadius: 7, padding: 20, margin: 30,
             shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.7, shadowRadius: 2, elevation: 5}}>
                 <Text style={{textAlign: 'center', fontWeight: 'bold', color: '#236cb5', fontSize: 20}}>검색할 화장품 사진 가져오기</Text>
@@ -68,7 +67,6 @@ function SearchModal({navigation}) {
                     <Text style={{paddingTop: 10, color: '#236cb5', fontSize: 17, fontWeight: 'bold'}}>취소</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{flex: 1}}></View>
         </View>
     );
 }

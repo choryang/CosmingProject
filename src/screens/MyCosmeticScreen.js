@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
+var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
 function MyCosmeticScreen({navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
-
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() =>
     {
         var len = 0;
         var FItems = [];//임시배열
 
-        var sql = 'SELECT b_id, name, costype, ing_ids FROM board where like = 1';
+        var sql = 'SELECT b_id, name, costype, ing_ids, img FROM board where like = 1';
         db.transaction(tx => {
             tx.executeSql(
                 sql, [],
@@ -25,18 +26,16 @@ function MyCosmeticScreen({navigation}) {
                         for (let i = 0; i < len; i++) {
                             FItems.push(results.rows.item(i));
                         }
-                        setFlatListItems(FItems);
-                    } else {
-                        alert('데이터가 없습니다.');
                     }
-
+                    setFlatListItems(FItems);
                 }
             );
-        })
+        });
 
-    }, []);
 
-    const Item = ({b_id, name, type, ing_ids}) => {
+    }, [refresh]);
+
+    const Item = ({b_id, name, type, ing_ids, img}) => {
 
 
      const ingData = () => {
@@ -46,67 +45,48 @@ function MyCosmeticScreen({navigation}) {
             ings.push(temp[i]);
         }
 
-        navigation.navigate('Detail', {screenId: 2, dataUri: ".", Data: ings, cosname: name, costype: type});
+        navigation.navigate('Detail', {screenId: 2, dataUri: img, Data: ings, cosname: name, costype: type});
      }
 
-     deleteBoard = () => {
-         db.transaction(tx => {
-           tx.executeSql(
-             'DELETE FROM board where b_id=?',
-             [b_id],
-             (tx, results) => {
-               console.log('Results', results.rowsAffected);
-               if (results.rowsAffected) {
-                 alert(name +'이 삭제되었습니다.');
-               } else {
-                 alert('삭제에 실패하였습니다. 다시 시도해주세요.');
-               }
-             }
-           );
-         });
-       };
 
       return (
-        <View style={styles.item}>
-          <TouchableOpacity style={{flex:1, alignItems: 'center'}} onPress={ingData}>
-            <Image style={{height: 55, resizeMode: 'contain'}} source={require('../images/infoblank.png')} />
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.item} onPress={ingData}>
+          <View style={{flex:1.5, alignItems: 'center'}}>
+            <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+img}} />
+          </View>
           <View style={{flex:2}}>
            <Text style={styles.title}>{name}</Text>
            <Text style={styles.textcos}>{type}</Text>
           </View>
           <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
-              <TouchableOpacity>
-                  <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/likeselect.png')} />
+              <TouchableOpacity onPress={() => navigation.navigate('Like', {id: b_id, cosname: name, costype: type, screenId: 2})}>
+                  <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/modiname.png')} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={deleteBoard}>
+              <TouchableOpacity onPress={() => navigation.navigate('Delete', {id: b_id})}>
                   <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/deleterecord.png')} />
               </TouchableOpacity>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     }
 
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
-            <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingTop: 20}}>
-                <Image style={{marginTop: 7, height: '80%', width: '30%', resizeMode: 'contain'}} source={require('../images/homelogo.png')} />
-                <Image style={{marginTop: 20, height: '80%', width: '50%', resizeMode: 'contain'}} source={require('../images/hometext.png')} />
-                <TouchableOpacity style={{flex: 1}} onPress={() => navigation.navigate('Home')}>
-                    <Image style={{marginTop: 5, height: '110%', width: '110%', resizeMode: 'contain'}} source={require('../images/homelarge.png')} />
-                </TouchableOpacity>
-            </View>
+            <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 5}}>
                 <Image style={{marginTop: 5, height: '60%', width: '10%', resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                 <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>내 서랍</Text>
             </View>
             <View style={{flex: 1}}>
 
+                  {(FlatListItems.length == 0) ?
+                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingLeft: 10}}>데이터가 없습니다.</Text>
+                  :
                   <FlatList
                     data={FlatListItems}
-                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids}/>}
+                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids} img={item.img}/>}
                     keyExtractor={(item, index) => index.toString()}
-                  />
+                  />}
 
             </View>
         </View>

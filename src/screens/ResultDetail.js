@@ -1,8 +1,9 @@
 import React, { useState, useEffect, BackHandler } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
+import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connction to access the pre-populated user_db.db
-var db = openDatabase({ name: 'IngBo.db', createFromLocation : 1});
+var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
 
@@ -16,6 +17,11 @@ function ResultDetail({route, navigation}) {
     var where;
     var ing_ids = "";
 
+    function addZero(date) {
+
+        date = date >= 10 ? date : "0" + date;
+        return date;
+    }
 
 
 
@@ -46,11 +52,11 @@ function ResultDetail({route, navigation}) {
                         }
                         if(screenId == 0){
                             var sRecord = new Date();
-                            var sDate = sRecord.getFullYear() + "-" + (sRecord.getMonth() + 1) + "-" + sRecord.getDate();
-                            var sTime = sRecord.getHours() + ":" + sRecord.getMinutes() + ":" + sRecord.getSeconds();
+                            var sDate = sRecord.getFullYear() + "-" + addZero(sRecord.getMonth() + 1) + "-" + addZero(sRecord.getDate());
+                            var sTime = addZero(sRecord.getHours()) + ":" + addZero(sRecord.getMinutes()) + ":" + addZero(sRecord.getSeconds());
                             tx.executeSql(
-                               'INSERT INTO board (search_date, search_time, name, costype, ing_ids) VALUES (?,?,?,?,?)',
-                               [sDate,sTime,' ',' ',ing_ids],
+                               'INSERT INTO board (search_date, search_time, name, costype, ing_ids, img) VALUES (?,?,?,?,?,?)',
+                               [sDate,sTime,' ',' ',ing_ids,dataUri],
                                (tx, results) => {
                                  console.log('insert result');
                                  if (results.rowsAffected > 0) {
@@ -156,13 +162,7 @@ function ResultDetail({route, navigation}) {
 
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
-            <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingTop: 20}}>
-                <Image style={{marginTop: 7, height: '80%', width: '30%', resizeMode: 'contain'}} source={require('../images/homelogo.png')} />
-                <Image style={{marginTop: 20, height: '80%', width: '50%', resizeMode: 'contain'}} source={require('../images/hometext.png')} />
-                <TouchableOpacity style={{flex: 1}} onPress={() => navigation.navigate('Home')}>
-                    <Image style={{marginTop: 5, height: '110%', width: '110%', resizeMode: 'contain'}} source={require('../images/homelarge.png')} />
-                </TouchableOpacity>
-            </View>
+            <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{alignItems: 'center', marginVertical: 15, backgroundColor: '#035eac'}}>
                 <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 15, paddingVertical: 5}}>분석 결과</Text>
             </View>
@@ -170,7 +170,7 @@ function ResultDetail({route, navigation}) {
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
                     <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+dataUri}} />
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     {(screenId == 2) &&
                     <View style={{flexDirection: 'row'}}>
                         <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 13}}>제품명</Text>
