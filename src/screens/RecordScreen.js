@@ -50,10 +50,6 @@ function RecordScreen({route, navigation}) {
         }
 
 
-
-
-
-
         return (
             <TouchableOpacity style={styles.item} onPress={ingData}>
                 <View style={{flex:1.5, alignItems: 'center'}}>
