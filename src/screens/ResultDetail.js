@@ -55,8 +55,8 @@ function ResultDetail({route, navigation}) {
                             var sDate = sRecord.getFullYear() + "-" + addZero(sRecord.getMonth() + 1) + "-" + addZero(sRecord.getDate());
                             var sTime = addZero(sRecord.getHours()) + ":" + addZero(sRecord.getMinutes()) + ":" + addZero(sRecord.getSeconds());
                             tx.executeSql(
-                               'INSERT INTO board (search_date, search_time, name, costype, ing_ids, img) VALUES (?,?,?,?,?,?)',
-                               [sDate,sTime,' ',' ',ing_ids,dataUri],
+                               'INSERT INTO board (search_date, search_time, name, costype, memo, ing_ids, img) VALUES (?,?,?,?,?,?,?)',
+                               [sDate,sTime,' ',' ',' ',ing_ids,dataUri],
                                (tx, results) => {
                                  console.log('insert result');
                                  if (results.rowsAffected > 0) {

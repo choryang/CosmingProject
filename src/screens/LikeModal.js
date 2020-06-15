@@ -34,11 +34,12 @@ function LikeModal({route, navigation}) {
     const { id } = route.params;
     const { cosname } = route.params;
     const { costype } = route.params;
+    const { cosmemo } = route.params;
     const { screenId } = route.params;
 
     const [name, onChangeName] = useState(cosname);
     const [type, onChangeType] = useState(costype);
-    const [memo, onChangeMemo] = useState("memo");
+    const [memo, onChangeMemo] = useState(cosmemo);
     const [selected, setSelected] = useState(0);
     var rand = Math.random();
 
@@ -65,8 +66,8 @@ function LikeModal({route, navigation}) {
     LikeCos = () => {
             db.transaction((tx)=> {
                 tx.executeSql(
-                    'UPDATE board set name=?, costype=?, like=1 where b_id=?',
-                    [name, type, id],
+                    'UPDATE board set name=?, costype=?, memo=?, like=1 where b_id=?',
+                    [name, type, memo, id],
                     (tx, results) => {
                         console.log('Results',results.rowsAffected);
                         if(results.rowsAffected){
@@ -75,7 +76,7 @@ function LikeModal({route, navigation}) {
                                 navigation.navigate('Record', {refresh: rand});
                             }
                             else {
-                                if(name != cosname || type != costype){
+                                if(name != cosname || type != costype || type != cosmemo){
                                     alert('수정되었습니다.');
                                 }
                                 navigation.navigate('MyCosmetic', {refresh: rand});

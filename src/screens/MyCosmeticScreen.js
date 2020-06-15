@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
 var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
+
 function MyCosmeticScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
+    const [pickerSort, setPickerSort] = useState("필터");
 
     useEffect(() =>
     {
         var len = 0;
         var FItems = [];//임시배열
 
-        var sql = 'SELECT b_id, name, costype, ing_ids, img FROM board where like = 1';
+        var sql = 'SELECT b_id, name, costype, memo, ing_ids, img FROM board where like = 1';
         db.transaction(tx => {
             tx.executeSql(
                 sql, [],
                 (tx, results) => {
                     len = results.rows.length;
-                    console.log('len', len);
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             FItems.push(results.rows.item(i));
@@ -34,7 +36,7 @@ function MyCosmeticScreen({route, navigation}) {
 
     }, [route.params?.refresh]);
 
-    const Item = ({b_id, name, type, ing_ids, img}) => {
+    const Item = ({b_id, name, type, ing_ids, memo, img}) => {
 
 
      const ingData = () => {
@@ -56,9 +58,10 @@ function MyCosmeticScreen({route, navigation}) {
           <View style={{flex:2}}>
            <Text style={styles.title}>{name}</Text>
            <Text style={styles.textcos}>{type}</Text>
+           <Text style={styles.textcos}>{memo}</Text>
           </View>
           <View style={{flex:1,  justifyContent: 'space-between', alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => {navigation.navigate('Like', {id: b_id, cosname: name, costype: type, screenId: 2})}}>
+              <TouchableOpacity onPress={() => {navigation.navigate('Like', {id: b_id, cosname: name, costype: type, cosmemo: memo, screenId: 2})}}>
                   <Image style={{height: 20, resizeMode: 'contain', margin:5}} source={require('../images/modiname.png')} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate('Delete', {id: b_id, screenId: 2})}>
@@ -72,9 +75,22 @@ function MyCosmeticScreen({route, navigation}) {
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
             <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
-            <View style={{flex: 0.1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 5}}>
-                <Image style={{marginTop: 5, height: 30, width: 30, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
-                <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>내 서랍</Text>
+            <View style={{flex: 0.1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 5}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image style={{marginTop: 5, height: 30, width: 30, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
+                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>내 서랍</Text>
+                </View>
+                <Picker
+                    selectedValue={pickerSort}
+                    style={{height: 30, width: 150, color: '#035eac', backgroundColor: '#ffffff'}}
+                    onValueChange={(itemValue, itemIndex) =>
+                    setPickerSort(itemValue)}
+                    mode={'dropdown'}
+
+                >
+                    <Picker.Item label="최근 분석 순" value="최근 분석 순" color="#035eac"/>
+                    <Picker.Item label="사용기한 임박 순" value="사용기한 임박 순" color="#035eac"/>
+                </Picker>
             </View>
             <View style={{flex: 1}}>
 
@@ -83,7 +99,7 @@ function MyCosmeticScreen({route, navigation}) {
                   :
                   <FlatList
                     data={FlatListItems}
-                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids} img={item.img}/>}
+                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids} memo={item.memo} img={item.img}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />}
 

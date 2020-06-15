@@ -25,7 +25,7 @@ function CropImage({route, navigation}) {
 
         let img = croppedImage;
         ImgToBase64.getBase64String(img)
-        .then(base64String => {setEnc(base64String); console.log(typeof(enc));})
+        .then(base64String => {setEnc(base64String);})
         .catch(err => console.log(err));
 
     },[croppedImage]);
