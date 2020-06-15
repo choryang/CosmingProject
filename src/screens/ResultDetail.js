@@ -58,7 +58,6 @@ function ResultDetail({route, navigation}) {
                                'INSERT INTO board (search_date, search_time, name, costype, ing_ids, img) VALUES (?,?,?,?,?,?)',
                                [sDate,sTime,' ',' ',ing_ids,dataUri],
                                (tx, results) => {
-                                 console.log('insert result');
                                  if (results.rowsAffected > 0) {
                                    alert('검색기록이 저장되었습니다.');
                                  } else {
