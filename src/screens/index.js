@@ -30,10 +30,10 @@ function App() {
 
 return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home"  headerMode="none">
-            <Stack.Screen name="Search" component={SearchModal} options={{mode: 'modal', cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
-            <Stack.Screen name="Like" component={LikeModal} initialParams={{ id: 0, cosname: "제품이름", costype: "제품유형", memo: " ", screenId: 1 }} options={{mode: 'modal', cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
-            <Stack.Screen name="Delete" component={DeleteModal} initialParams={{ id: 0, screenId: 1 }} options={{mode: 'modal', cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
+        <Stack.Navigator initialRouteName="Home"  headerMode="none" backBehavior="initialRoute">
+            <Stack.Screen name="Search" component={SearchModal} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
+            <Stack.Screen name="Like" component={LikeModal} initialParams={{ id: 0, cosname: "제품이름", costype: "제품유형", cosmemo: "메모", screenId: 1 }} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
+            <Stack.Screen name="Delete" component={DeleteModal} initialParams={{ id: 0, screenId: 1 }} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="Record" component={RecordScreen}/>
             <Stack.Screen name="MyCosmetic" component={MyCosmeticScreen}/>

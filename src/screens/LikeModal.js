@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 const typeData = [
     {
@@ -66,14 +66,18 @@ function LikeModal({route, navigation}) {
     LikeCos = () => {
             db.transaction((tx)=> {
                 tx.executeSql(
-                    'UPDATE board set name=?, costype=?, memo=?, like=1 where b_id=?',
+                    'UPDATE board set cosname=?, costype=?, memo=?, like=1 where b_id=?',
                     [name, type, memo, id],
                     (tx, results) => {
                         console.log('Results',results.rowsAffected);
                         if(results.rowsAffected){
-                            if( screenId == 1 ){
+                            if( screenId == 1){
                                 alert('내 서랍에 저장되었습니다.');
                                 navigation.navigate('Record', {refresh: rand});
+                            }
+                            else if( screenId == 3) {
+                                alert('내 서랍에 저장되었습니다.');
+                                navigation.navigate('MyCosmetic', {refresh: rand});
                             }
                             else {
                                 if(name != cosname || type != costype || type != cosmemo){

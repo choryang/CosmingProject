@@ -4,20 +4,19 @@ import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 
 function MyCosmeticScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
-    const [pickerSort, setPickerSort] = useState("필터");
 
     useEffect(() =>
     {
         var len = 0;
         var FItems = [];//임시배열
 
-        var sql = 'SELECT b_id, name, costype, memo, ing_ids, img FROM board where like = 1';
+        var sql = 'SELECT b_id, cosname, costype, memo, ing_ids, img FROM board where like = 1';
         db.transaction(tx => {
             tx.executeSql(
                 sql, [],
@@ -80,17 +79,6 @@ function MyCosmeticScreen({route, navigation}) {
                     <Image style={{marginTop: 5, height: 30, width: 30, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                     <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>내 서랍</Text>
                 </View>
-                <Picker
-                    selectedValue={pickerSort}
-                    style={{height: 30, width: 150, color: '#035eac', backgroundColor: '#ffffff'}}
-                    onValueChange={(itemValue, itemIndex) =>
-                    setPickerSort(itemValue)}
-                    mode={'dropdown'}
-
-                >
-                    <Picker.Item label="최근 분석 순" value="최근 분석 순" color="#035eac"/>
-                    <Picker.Item label="사용기한 임박 순" value="사용기한 임박 순" color="#035eac"/>
-                </Picker>
             </View>
             <View style={{flex: 1}}>
 
@@ -99,7 +87,7 @@ function MyCosmeticScreen({route, navigation}) {
                   :
                   <FlatList
                     data={FlatListItems}
-                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids} memo={item.memo} img={item.img}/>}
+                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.cosname} type={item.costype} ing_ids={item.ing_ids} memo={item.memo} img={item.img}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />}
 

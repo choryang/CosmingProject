@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function RecordScreen({route, navigation}) {
 
@@ -46,7 +46,7 @@ function RecordScreen({route, navigation}) {
                 ings.push(temp[i]);
             }
             console.log(ings);
-            navigation.navigate('Detail', {screenId: 1, dataUri: img, Data: ings, cosname: " ", costype: " "});
+            navigation.navigate('Detail', {screenId: 1, dataUri: img, Data: ings, cosname: " ", costype: " ", b_id: b_id});
         }
 
 
