@@ -7,6 +7,7 @@ function SearchModal({navigation}) {
 
     const options = {
         title: 'Load Photo',
+        rotation: 360,
         storageOptions: {
         path: 'cosming',
         },
