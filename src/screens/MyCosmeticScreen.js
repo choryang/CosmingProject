@@ -16,7 +16,7 @@ function MyCosmeticScreen({route, navigation}) {
         var len = 0;
         var FItems = [];//임시배열
 
-        var sql = 'SELECT b_id, cosname, costype, memo, ing_ids, img FROM board where like = 1';
+        var sql = 'SELECT b_id, cosname, costype, memo, ing_ids, img FROM board WHERE like = 1';
         db.transaction(tx => {
             tx.executeSql(
                 sql, [],
@@ -52,7 +52,7 @@ function MyCosmeticScreen({route, navigation}) {
       return (
         <TouchableOpacity style={styles.item} onPress={ingData}>
           <View style={{flex:1.5, alignItems: 'center'}}>
-            <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+img}} />
+            <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: img}} />
           </View>
           <View style={{flex:2}}>
            <Text style={styles.title}>{name}</Text>

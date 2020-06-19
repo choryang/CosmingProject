@@ -13,7 +13,7 @@ function DeleteModal({route, navigation}) {
     deleteBoard = () => {
         db.transaction(tx => {
             tx.executeSql(
-            'DELETE FROM board where b_id=?',
+            'DELETE FROM board WHERE b_id=?',
             [id],
             (tx, results) => {
                 console.log('Results', results.rowsAffected);

@@ -66,7 +66,7 @@ function LikeModal({route, navigation}) {
     LikeCos = () => {
             db.transaction((tx)=> {
                 tx.executeSql(
-                    'UPDATE board set cosname=?, costype=?, memo=?, like=1 where b_id=?',
+                    'UPDATE board set cosname=?, costype=?, memo=?, like=1 WHERE b_id=?',
                     [name, type, memo, id],
                     (tx, results) => {
                         console.log('Results',results.rowsAffected);

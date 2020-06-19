@@ -17,7 +17,7 @@ function RecordScreen({route, navigation}) {
         var len = 0;
         var FItems = []; // 임시 배열
 
-        var sql = 'SELECT b_id, search_date, search_time, ing_ids, img FROM board where like = 0';
+        var sql = 'SELECT b_id, search_date, search_time, ing_ids, img FROM board WHERE like = 0';
         db.transaction(tx => {
             tx.executeSql(
                 sql, [],
@@ -53,7 +53,7 @@ function RecordScreen({route, navigation}) {
         return (
             <TouchableOpacity style={styles.item} onPress={ingData}>
                 <View style={{flex:1.5, alignItems: 'center'}}>
-                <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+img}}/>
+                <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: img}}/>
                 </View>
                 <View style={{flex:2}}>
                     <View style={{flexDirection: 'row'}}><Text style={styles.title}>검색 날짜  </Text><Text style={styles.textcos}>{sDate}</Text></View>

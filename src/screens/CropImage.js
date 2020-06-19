@@ -113,7 +113,7 @@ function CropImage({route, navigation}) {
                         comma = 0 //,로 끝나지 않음 > 하나의 성분
                     }
                 }
-            navigation.navigate('Detail', {screenId: 0, image: enc, Data: tempArray, b_id: 0});
+            navigation.navigate('Detail', {screenId: 0, image: croppedImage, Data: tempArray, b_id: 0});
 
         }).catch((error) =>
         {

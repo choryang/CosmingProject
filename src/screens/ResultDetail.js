@@ -37,7 +37,7 @@ function ResultDetail({route, navigation}) {
             where = 'ing_id';
         }
 
-        var sql = 'SELECT ing_id, ing_name, ing_purpose, ing_data, ing_ewg FROM ingEWG where ' + where + ' in (';
+        var sql = 'SELECT ing_id, ing_name, ing_purpose, ing_data, ing_ewg FROM ingEWG WHERE ' + where + ' in (';
         for(let i = 0; i < Data.length - 1; i++){
             sql = sql + '?,';
         }
@@ -51,15 +51,6 @@ function ResultDetail({route, navigation}) {
                     var sDate;
                     var sTime;
                     if (len > 0) {
-                        /*for (let i = 0; i < Data.length; i++){
-                            for (let j = 0; j < len; j++) {
-                                if(Data[i] == results.rows.item(j).ing_name) {
-                                    FItems.push(results.rows.item(j));
-                                    ing_ids = ing_ids + results.rows.item(j).ing_id + " ";
-                                    break;
-                                }
-                            }
-                        }*/
                         var sRecord = new Date();//검색날짜 및 시간 데이터를 담을 객체
                         if(screenId == 0){//처음 검색 (검색기록 리스트나 내 서랍에서 다시 확인하는 것 아님)
                             for (let i = 0; i < Data.length; i++){
@@ -86,7 +77,7 @@ function ResultDetail({route, navigation}) {
                                }
                              );
                             /*tx.executeSql(
-                                'SELECT b_id FROM board where search_time = ?',
+                                'SELECT b_id FROM board WHERE search_time = ?',
                                 [sTime],
                                 (tx, results) => {
                                     if (results.rowsAffected > 0) {
@@ -204,7 +195,7 @@ function ResultDetail({route, navigation}) {
             </View>
             <View style={{flex: 1}}>
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+image}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: image}} />
                 </View>
                 {(screenId == 2) &&
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', marginHorizontal: 5, paddingVertical: 5}}>
