@@ -8,7 +8,7 @@ var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 function ResultDetail({route, navigation}) {
 
     const{ screenId } = route.params;
-    const { dataUri } = route.params;
+    const { image } = route.params;
     const { Data } = route.params;
     const { cosname } = route.params;
     const { costype } = route.params;
@@ -51,17 +51,31 @@ function ResultDetail({route, navigation}) {
                     var sDate;
                     var sTime;
                     if (len > 0) {
-                        for (let i = 0; i < len; i++) {
-                            FItems.push(results.rows.item(i));
-                            ing_ids = ing_ids + results.rows.item(i).ing_id + " ";
-                        }
-                        if(screenId == 0){
-                            var sRecord = new Date();
+                        /*for (let i = 0; i < Data.length; i++){
+                            for (let j = 0; j < len; j++) {
+                                if(Data[i] == results.rows.item(j).ing_name) {
+                                    FItems.push(results.rows.item(j));
+                                    ing_ids = ing_ids + results.rows.item(j).ing_id + " ";
+                                    break;
+                                }
+                            }
+                        }*/
+                        var sRecord = new Date();//검색날짜 및 시간 데이터를 담을 객체
+                        if(screenId == 0){//처음 검색 (검색기록 리스트나 내 서랍에서 다시 확인하는 것 아님)
+                            for (let i = 0; i < Data.length; i++){
+                                for (let j = 0; j < len; j++) {
+                                    if(Data[i] == results.rows.item(j).ing_name) {
+                                        FItems.push(results.rows.item(j));
+                                        ing_ids = ing_ids + results.rows.item(j).ing_id + " ";
+                                        break;
+                                    }
+                                }
+                            }
                             sDate = sRecord.getFullYear() + "-" + addZero(sRecord.getMonth() + 1) + "-" + addZero(sRecord.getDate());
                             sTime = addZero(sRecord.getHours()) + ":" + addZero(sRecord.getMinutes()) + ":" + addZero(sRecord.getSeconds());
                             tx.executeSql(
                                'INSERT INTO board (search_date, search_time, cosname, costype, memo, ing_ids, img) VALUES (?,?,?,?,?,?,?)',
-                               [sDate,sTime,' ',' ',' ',ing_ids,dataUri],
+                               [sDate,sTime,' ',' ',' ',ing_ids,image],
                                (tx, results) => {
                                  console.log('insert result');
                                  if (results.rowsAffected > 0) {
@@ -85,10 +99,19 @@ function ResultDetail({route, navigation}) {
                                 }
                             );*/
                          }
+                         else {//검색기록이나 내 서랍에서 결과화면으로 이동
+                            for (let i = 0; i < Data.length; i++){
+                                for (let j = 0; j < len; j++) {
+                                    if(Data[i] == results.rows.item(j).ing_id) {
+                                        FItems.push(results.rows.item(j));
+                                        break;
+                                    }
+                                }
+                            }
+                         }
                     } else {
                         alert('No data found');
                     }
-
                 }
             );
 
@@ -107,39 +130,45 @@ function ResultDetail({route, navigation}) {
     const Item = ({id, name, purpose, ewg, data}) => {
         var str = [];
         var purposeStr = "";
-        str = purpose.split(" ");
-        for(let i = 0; i < str.length; i++){
-            switch(str[i]){
-                case "1":
-                    purposeStr = purposeStr + "보습효과  ";
-                    break;
-                case "2":
-                    purposeStr = purposeStr + "유화제  ";
-                    break;
-                case "3":
-                    purposeStr = purposeStr + "세정효과  ";
-                    break;
-                case "4":
-                    purposeStr = purposeStr + "사용감개선  ";
-                    break;
-                case "5":
-                    purposeStr = purposeStr + "보존제  ";
-                    break;
-                case "6":
-                    purposeStr = purposeStr + "색소  ";
-                    break;
-                case "7":
-                    purposeStr = purposeStr + "기능성원료  ";
-                    break;
-                case "8":
-                    purposeStr = purposeStr + "향료  ";
-                    break;
-                case "9":
-                    purposeStr = purposeStr + "기타  ";
-                    break;
-                default :
-                    purposeStr = purposeStr + "";
+        if(purpose != null) {//배합목적이 존재하면
+            str = purpose.split(" ");
+            for(let i = 0; i < str.length; i++){
+                switch(str[i]){
+                    case "1":
+                        purposeStr = purposeStr + "보습효과  ";
+                        break;
+                    case "2":
+                        purposeStr = purposeStr + "유화제  ";
+                        break;
+                    case "3":
+                        purposeStr = purposeStr + "세정효과  ";
+                        break;
+                    case "4":
+                        purposeStr = purposeStr + "사용감개선  ";
+                        break;
+                    case "5":
+                        purposeStr = purposeStr + "보존제  ";
+                        break;
+                    case "6":
+                        purposeStr = purposeStr + "색소  ";
+                        break;
+                    case "7":
+                        purposeStr = purposeStr + "기능성원료  ";
+                        break;
+                    case "8":
+                        purposeStr = purposeStr + "향료  ";
+                        break;
+                    case "9":
+                        purposeStr = purposeStr + "기타  ";
+                        break;
+                    default :
+                        purposeStr = purposeStr + "";
+                }
+
             }
+        }
+        else {
+            purposeStr = "No data";
         }
 
         return (
@@ -175,7 +204,7 @@ function ResultDetail({route, navigation}) {
             </View>
             <View style={{flex: 1}}>
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+dataUri}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+image}} />
                 </View>
                 {(screenId == 2) &&
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', marginHorizontal: 5, paddingVertical: 5}}>

@@ -46,7 +46,7 @@ function RecordScreen({route, navigation}) {
                 ings.push(temp[i]);
             }
             console.log(ings);
-            navigation.navigate('Detail', {screenId: 1, dataUri: img, Data: ings, cosname: " ", costype: " ", b_id: b_id});
+            navigation.navigate('Detail', {screenId: 1, image: img, Data: ings, cosname: " ", costype: " ", b_id: b_id});
         }
 
 

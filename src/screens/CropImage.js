@@ -87,35 +87,33 @@ function CropImage({route, navigation}) {
                 var prevX = 0;
                 var comma = 0;
                 for(var i = 0; i < obj.images[0].fields.length; i++){
-                    initText = obj.images[0].fields[i].inferText;
-                    splitText = obj.images[0].fields[i].inferText.split(",");
+                    initText = obj.images[0].fields[i].inferText.trim();
+                    splitText = obj.images[0].fields[i].inferText.split(/(?:,|\.)+/);//,가 .으로 인식되는 경우 발생
                     nextX = obj.images[0].fields[i].boundingPoly.vertices[2].x;
                     if(splitText.length > 2){// 성분명 중간에 ,가 있는 경우(ex. 1,2-헥산다이올)
-                        splitText.pop();//마지막은 빈칸이라서
+                        splitText.pop();
                         nextText = splitText.join();
                     }
                     else{
-                        nextText = splitText[0].trim();//끝에만 ,가 있는 완전한 성분명
+                        nextText = splitText[0];//끝에만 ,가 있는 완전한 성분명
                     }
 
                     if(prevX > nextX && comma == 0 && tempArray.length > 1){ // 줄바뀜이 있을 때
                     // 줄바꿈을 기준으로 하나의 성분인 경우 >> 줄바뀜이 일어났고 ,로 구분되지 않았기 때문에 하나의 성분으로 판단
-                        tempArray.pop();
                         nextText = previousText + nextText;
                     }
-
+                    nextText.trim();
                     tempArray.push(nextText);//
                     prevX = nextX;
                     previousText = nextText;
-                    if(initText.charAt(initText.length - 1) == "," ) {
-                        comma = 1 //문자열의 끝자리가 ,로 끝남
+                    if(initText.charAt(initText.length - 1) == "," || initText.charAt(initText.length - 1) == ".") {
+                        comma = 1 //문자열의 끝자리가 ,(또는 .)로 끝남
                     }
                     else {
                         comma = 0 //,로 끝나지 않음 > 하나의 성분
                     }
                 }
-
-            navigation.navigate('Detail', {screenId: 0, dataUri: enc, Data: tempArray, b_id: 0});
+            navigation.navigate('Detail', {screenId: 0, image: enc, Data: tempArray, b_id: 0});
 
         }).catch((error) =>
         {
@@ -130,7 +128,7 @@ function CropImage({route, navigation}) {
             <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
             <View style={{flex: 1, justifyContent: 'center', paddingTop: 100}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+enc}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: croppedImage}} />
                 </View>
                 <TouchableOpacity style={{flex: 0.2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', marginTop: 15, borderRadius: 2}}
                 onPress={cropImage}
