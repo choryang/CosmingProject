@@ -14,16 +14,36 @@ function ResultDetail({route, navigation}) {
     const { costype } = route.params;
     const { b_id } = route.params;
 
-    var item_id = b_id;
 
     var FItems = [];
     var where;
     var ing_ids = "";
+    var sDate;
+    var sTime;
 
     function addZero(date) {
 
         date = date >= 10 ? date : "0" + date;
         return date;
+    }
+
+    const GetIdGoLike = () => {
+        var item_id;
+        console.log(sTime);
+         db.transaction(txn => {
+            txn.executeSql(
+                'SELECT b_id FROM board WHERE search_time = ? AND search_date = ?',
+                [sTime, sDate],
+                (txn, results) => {
+                    if (results.rows.length > 0) {
+                       item_id = results.rows.item(0).b_id;
+                       navigation.navigate('Like', {id: item_id, screenId: 3})
+                    } else {
+                       alert('다시 시도해주세요.');
+                    }
+                }
+            );
+         });
     }
 
 
@@ -48,8 +68,6 @@ function ResultDetail({route, navigation}) {
                 sql, Data,
                 (tx, results) => {
                     var len = results.rows.length;
-                    var sDate;
-                    var sTime;
                     if (len > 0) {
                         var sRecord = new Date();//검색날짜 및 시간 데이터를 담을 객체
                         if(screenId == 0){//처음 검색 (검색기록 리스트나 내 서랍에서 다시 확인하는 것 아님)
@@ -76,19 +94,6 @@ function ResultDetail({route, navigation}) {
                                  }
                                }
                              );
-                            /*tx.executeSql(
-                                'SELECT b_id FROM board WHERE search_time = ?',
-                                [sTime],
-                                (tx, results) => {
-                                    if (results.rowsAffected > 0) {
-                                       item_id = results.rows.item(0);
-                                       console.log(item_id);
-                                       alert('검색기록이 저장되었습니다.');
-                                    } else {
-                                       alert('검색기록 저장에 실패하였습니다. 다시 시도해주세요.');
-                                    }
-                                }
-                            );*/
                          }
                          else {//검색기록이나 내 서랍에서 결과화면으로 이동
                             for (let i = 0; i < Data.length; i++){
@@ -105,9 +110,6 @@ function ResultDetail({route, navigation}) {
                     }
                 }
             );
-
-
-
         });
 
    }, []);
@@ -119,6 +121,7 @@ function ResultDetail({route, navigation}) {
 
 
     const Item = ({id, name, purpose, ewg, data}) => {
+
         var str = [];
         var purposeStr = "";
         if(purpose != null) {//배합목적이 존재하면
@@ -197,7 +200,7 @@ function ResultDetail({route, navigation}) {
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
                     <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: image}} />
                 </View>
-                {(screenId == 2) &&
+                {(screenId == 2) ?
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'space-between', marginHorizontal: 5, paddingVertical: 5}}>
                     <View style={{flexDirection: 'row'}}>
                         <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 13}}>제품명</Text>
@@ -208,14 +211,13 @@ function ResultDetail({route, navigation}) {
                     <TouchableOpacity>
                         <Image style={{height: 20, width: 20, resizeMode: 'contain'}} source={require('../images/alreadylike.png')} />
                     </TouchableOpacity>
-                </View>}
-                {(screenId == 1) && <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'flex-end', width: '100%', height: 30}}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Like', {id: b_id, screenId: 3})}>
+                </View> :
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'flex-end', width: '100%', height: 30}}>
+                    <TouchableOpacity onPress={(screenId == 1) ? () => navigation.navigate('Like', {id: b_id, screenId: 3}) : GetIdGoLike}>
                         <Image style={{height: 40, width: 40, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
                     </TouchableOpacity>
                 </View>
                 }
-                {(screenId == 0) && <View style={{height: 30}}></View>}
                 <View style={styles.itemContainer}>
                    <FlatList
                         data={FItems}

@@ -73,7 +73,7 @@ function MyCosmeticScreen({route, navigation}) {
 
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
-            <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.goBack()}/>
+            <Header goHome={() => navigation.navigate('Home')} goBack={() => navigation.navigate('Home')}/>
             <View style={{flex: 0.1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 5}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Image style={{marginTop: 5, height: 30, width: 30, resizeMode: 'contain'}} source={require('../images/likelarge.png')} />
@@ -90,7 +90,6 @@ function MyCosmeticScreen({route, navigation}) {
                     renderItem={({ item }) => <Item b_id={item.b_id} name={item.cosname} type={item.costype} ing_ids={item.ing_ids} memo={item.memo} img={item.img}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />}
-
             </View>
         </View>
 
