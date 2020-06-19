@@ -3,6 +3,14 @@ import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, Fl
 import Modal from 'react-native-modal';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
+import NativeAdView, {
+  CallToActionView,
+  IconView,
+  HeadlineView,
+  TaglineView,
+  AdvertiserView,
+  AdBadge,
+} from "react-native-admob-native-ads";
 //Connection to access the pre-populated user_db.db
 var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
@@ -79,9 +87,61 @@ function RecordScreen({route, navigation}) {
                 <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingTop: 3, paddingLeft: 5}}>검색 기록</Text>
             </View>
             <View style={{flex: 1}}>
+                <NativeAdView
+                   style={{width: "100%", alignSelf: "center", height: 85}}
+                   adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
+                 >
+                    <View style={{ height: 85, width: "100%", justifyContent: "center", backgroundColor: "white"}}>
+                          <AdBadge />
+                          <View
+                            style={{height: 85, width: "100%",
+                            flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 10}}>
+                          <IconView
+                              style={{
+                                width: 60,
+                                height: 60,
+                              }}
+                          />
+                            <View style={{width: "65%", maxWidth: "65%", paddingHorizontal: 6}}>
+                              <HeadlineView
+                                style={{
+                                  fontWeight: "bold",
+                                  fontSize: 13,
+                                }}
+                              />
+                              <TaglineView
+                                numberOfLines={1}
+                                style={{
+                                  fontSize: 11,
+                                }}
+                              />
+                              <AdvertiserView
+                                style={{
+                                  fontSize: 10,
+                                  color: "gray",
+                                }}
+                              />
+                            </View>
 
+                            <CallToActionView
+                              style={{
+                                height: 45,
+                                paddingHorizontal: 12,
+                                backgroundColor: "#035eac",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: 5,
+                                elevation: 10,
+                              }}
+                              textStyle={{ color: "white", fontSize: 14 }}
+                            />
+                          </View>
+                        </View>
+                      </NativeAdView>
                   {(FlatListItems.length == 0) ?
-                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingLeft: 10}}>데이터가 없습니다.</Text>
+                  <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>검색 기록이 없습니다.</Text>
+                   </View>
                   :
                   <FlatList
                     data={FlatListItems}

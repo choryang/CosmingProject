@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "578058625235",
+    "firebase_url": "https://cosming-81fa5.firebaseio.com",
+    "project_id": "cosming-81fa5",
+    "storage_bucket": "cosming-81fa5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578058625235:android:b130257bd68270ba4ff426",
+        "android_client_info": {
+          "package_name": "com.cosmingproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578058625235-8gb6fhmq8fpqojtb6j9m9gtnosia2rip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuEyGw6zVfJzVPOr1mITjo-QxTIGryx8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578058625235-8gb6fhmq8fpqojtb6j9m9gtnosia2rip.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

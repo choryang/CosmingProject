@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, BackHandler } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -83,7 +83,9 @@ function MyCosmeticScreen({route, navigation}) {
             <View style={{flex: 1}}>
 
                   {(FlatListItems.length == 0) ?
-                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingLeft: 10}}>데이터가 없습니다.</Text>
+                   <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15}}>아직 내 서랍에 담은 제품이 없습니다.</Text>
+                   </View>
                   :
                   <FlatList
                     data={FlatListItems}
