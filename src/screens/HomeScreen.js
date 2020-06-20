@@ -1,20 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, BackHandler, ToastAndroid } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
 var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
  function HomeScreen({navigation}) {
+
+     var exitApp = false;
+     var timeout;
+
+     const handleBackButton = () => {
+        // 2000(2초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
+        if (!exitApp) {
+            ToastAndroid.show('뒤로 버튼을 한번 더 누르시면 종료됩니다.', ToastAndroid.SHORT);
+            exitApp = true;
+            timeout = setTimeout(
+                () => {
+                    exitApp = false;
+                },
+                2000    // 2초
+            );
+        } else {
+            clearTimeout(timeout);
+            BackHandler.exitApp();  // 앱 종료
+        }
+        return true;
+    }
+
     useEffect(() => {
+        db.transaction(tx => {
+            tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS board (b_id INTEGER PRIMARY KEY AUTOINCREMENT, search_date VARCHAR(20), search_time VARCHAR(20), cosname VARCHAR(20), costype VARCHAR(20), memo VARCHAR(20), like INTEGER DEFAULT 0, ing_ids VARCHAR(255), img TEXT)',
+            [],
+            );
+        });
 
-            db.transaction(tx => {
-                tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS board (b_id INTEGER PRIMARY KEY AUTOINCREMENT, search_date VARCHAR(20), search_time VARCHAR(20), cosname VARCHAR(20), costype VARCHAR(20), memo VARCHAR(20), like INTEGER DEFAULT 0, ing_ids VARCHAR(255), img TEXT)',
-                [],
-                );
+        BackHandler.addEventListener("hardwareBackPress", handleBackButton);
 
-            });
-       }, []);
+        return () => BackHandler.removeEventListener("hardwareBackPress", handleBackButton);
+    }, []);
 
 
     return (

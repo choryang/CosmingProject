@@ -45,7 +45,6 @@ function CropImage({route, navigation}) {
             freeStyleCropEnabled: true // 안드로이드
         }).then(image => {
             setCroppedImage(image.path);
-            console.log(image);
         }).catch((error) => {});
     };
 

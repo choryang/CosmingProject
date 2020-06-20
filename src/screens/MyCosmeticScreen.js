@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, BackHandler } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -11,11 +11,15 @@ function MyCosmeticScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
 
+    const BackAction = () => {
+        () => navigation.navigate('Home');
+        return true;
+    }
+
     useEffect(() =>
     {
         var len = 0;
         var FItems = [];//임시배열
-
         var sql = 'SELECT b_id, cosname, costype, memo, ing_ids, img FROM board WHERE like = 1';
         db.transaction(tx => {
             tx.executeSql(
@@ -31,7 +35,6 @@ function MyCosmeticScreen({route, navigation}) {
                 }
             );
         });
-
 
     }, [route.params?.refresh]);
 

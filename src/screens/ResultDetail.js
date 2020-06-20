@@ -29,7 +29,6 @@ function ResultDetail({route, navigation}) {
 
     const GetIdGoLike = () => {
         var item_id;
-        console.log(sTime);
          db.transaction(txn => {
             txn.executeSql(
                 'SELECT b_id FROM board WHERE search_time = ? AND search_date = ?',

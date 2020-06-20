@@ -31,7 +31,6 @@ function RecordScreen({route, navigation}) {
                 sql, [],
                 (tx, results) => {
                     len = results.rows.length;
-                    console.log('len', len)
                     if (len > 0) {
                         for (var i = 0; i < len; i++) {
                             FItems.push(results.rows.item(i));
@@ -53,7 +52,6 @@ function RecordScreen({route, navigation}) {
             for(i = 0; i < temp.length; i++){
                 ings.push(temp[i]);
             }
-            console.log(ings);
             navigation.navigate('Detail', {screenId: 1, image: img, Data: ings, cosname: " ", costype: " ", b_id: b_id});
         }
 
@@ -98,8 +96,8 @@ function RecordScreen({route, navigation}) {
                             flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 10}}>
                           <IconView
                               style={{
-                                width: 60,
-                                height: 60,
+                                width: 50,
+                                height: 50,
                               }}
                           />
                             <View style={{width: "65%", maxWidth: "65%", paddingHorizontal: 6}}>
@@ -130,8 +128,6 @@ function RecordScreen({route, navigation}) {
                                 backgroundColor: "#035eac",
                                 justifyContent: "center",
                                 alignItems: "center",
-                                borderRadius: 5,
-                                elevation: 10,
                               }}
                               textStyle={{ color: "white", fontSize: 14 }}
                             />
