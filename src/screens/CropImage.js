@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import Header from './Header';
 import Modal from 'react-native-modal';
 //import ImagePicker from 'react-native-image-picker';

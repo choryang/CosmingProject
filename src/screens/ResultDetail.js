@@ -55,7 +55,7 @@ function ResultDetail({route, navigation}) {
             where = 'ing_id';
         }
 
-        var sql = 'SELECT ing_id, ing_name, ing_purpose, ing_data, ing_ewg FROM ingEWG WHERE ' + where + ' in (';
+        var sql = 'SELECT ing_id, ing_name, ing_purpose, ing_data, ing_ewg, ing_alg FROM ingEWG WHERE ' + where + ' in (';
         for(let i = 0; i < Data.length - 1; i++){
             sql = sql + '?,';
         }
@@ -84,9 +84,7 @@ function ResultDetail({route, navigation}) {
                                'INSERT INTO board (search_date, search_time, cosname, costype, memo, ing_ids, img) VALUES (?,?,?,?,?,?,?)',
                                [sDate,sTime,' ',' ',' ',ing_ids,image],
                                (tx, results) => {
-                                 console.log('insert result');
                                  if (results.rowsAffected > 0) {
-                                   //alert('검색기록이 저장되었습니다.');
                                    navigation.navigate('Ewg');
                                  } else {
                                    alert('검색기록 저장에 실패하였습니다. 다시 시도해주세요.');
@@ -94,7 +92,7 @@ function ResultDetail({route, navigation}) {
                                }
                              );
                          }
-                         else {//검색기록이나 내 서랍에서 결과화면으로 이동
+                         else {//검색기록이나 내 서랍에서 결과화면으로 이동했을 때
                             for (let i = 0; i < Data.length; i++){
                                 for (let j = 0; j < len; j++) {
                                     if(Data[i] == results.rows.item(j).ing_id) {
@@ -119,7 +117,7 @@ function ResultDetail({route, navigation}) {
 
 
 
-    const Item = ({id, name, purpose, ewg, data}) => {
+    const Item = ({id, name, purpose, ewg, data, alg}) => {
 
         var str = [];
         var purposeStr = "";
@@ -176,7 +174,6 @@ function ResultDetail({route, navigation}) {
                     {(ewg == "7") && <Image style={styles.imgEWG} source={require("../images/ewg_7.png")}/>}
                     {(ewg == "8") && <Image style={styles.imgEWG} source={require("../images/ewg_8.png")}/>}
                     {(ewg == "9") && <Image style={styles.imgEWG} source={require("../images/ewg_9.png")}/>}
-                    {(ewg == "10") && <Image style={styles.imgEWG} source={require("../images/ewg_10.png")}/>}
                     {(ewg == null) && <Image style={styles.imgEWG} source={require("../images/ewg_none.png")}/>}
                     {(data == "None") && <Text style={{color: '#E43D30', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
                     {(data == "Limited") && <Text style={{color: '#E45317', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
@@ -186,7 +183,10 @@ function ResultDetail({route, navigation}) {
                     {(data == null) && <Text style={styles.title}>No data</Text>}
                 </View>
                 <View style={{flex:2}}>
-                    <Text style={styles.name}>{name}</Text>
+                    <View style={{flexDirection: 'row', alignItems:'center', backgroundColor: '#b0c1e821'}}>
+                        <Text style={styles.name}>{name}</Text>
+                        {(alg == "A") && <Text style={{color: '#E43D30', fontSize: 10}}>알러지유발물질</Text>}
+                    </View>
                     <Text style={styles.text}>{purposeStr}</Text>
                 </View>
             </View>
@@ -225,7 +225,7 @@ function ResultDetail({route, navigation}) {
                 <View style={styles.itemContainer}>
                    <FlatList
                         data={FItems}
-                        renderItem={({ item }) => <Item id={item.ing_id} name={item.ing_name} purpose={item.ing_purpose} ewg={item.ing_ewg} data={item.ing_data}/>}
+                        renderItem={({ item }) => <Item id={item.ing_id} name={item.ing_name} purpose={item.ing_purpose} ewg={item.ing_ewg} data={item.ing_data} alg={item.ing_alg}/>}
                         keyExtractor={(item, index) => index.toString()}
                    />
                 </View>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         padding: 5,
-        backgroundColor: '#b0c1e821'
+        //backgroundColor: '#b0c1e821'
     },
 
     text: {

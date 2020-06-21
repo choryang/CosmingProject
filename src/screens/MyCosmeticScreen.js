@@ -11,11 +11,6 @@ function MyCosmeticScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
 
-    const BackAction = () => {
-        () => navigation.navigate('Home');
-        return true;
-    }
-
     useEffect(() =>
     {
         var len = 0;
@@ -48,7 +43,7 @@ function MyCosmeticScreen({route, navigation}) {
             ings.push(temp[i]);
         }
 
-        navigation.navigate('Detail', {screenId: 2, image: img, Data: ings, cosname: name, costype: type});
+        navigation.push('Detail', {screenId: 2, image: img, Data: ings, cosname: name, costype: type});
      }
 
 

@@ -69,13 +69,12 @@ function LikeModal({route, navigation}) {
                     'UPDATE board set cosname=?, costype=?, memo=?, like=1 WHERE b_id=?',
                     [name, type, memo, id],
                     (tx, results) => {
-                        console.log('Results',results.rowsAffected);
                         if(results.rowsAffected){
                             if( screenId == 1){
                                 alert('내 서랍에 저장되었습니다.');
                                 navigation.navigate('Record', {refresh: rand});
                             }
-                            else if( screenId == 3) {
+                            else if( screenId == 3) {// 분석결과 화면에서 내 서랍 저장 눌렀을 때
                                 alert('내 서랍에 저장되었습니다.');
                                 navigation.navigate('MyCosmetic', {refresh: rand});
                             }
@@ -131,7 +130,7 @@ function LikeModal({route, navigation}) {
                        onChangeText={text => onChangeMemo(text)}
                        placeholder={'메모를 입력해주세요'}
                        textAlign={'left'}
-                       maxLength={10}
+                       maxLength={20}
                        placeholderTextColor={'#035eac50'}
                     />
                 </View>
