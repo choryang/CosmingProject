@@ -26,6 +26,14 @@ function ResultDetail({route, navigation}) {
         return date;
     }
 
+    DataColor = (dataColor) => {
+        return {
+            fontWeight: 'bold',
+            fontSize: 15,
+            color: dataColor
+        }
+    }
+
     const GetIdGoLike = () => {
         var item_id;
          db.transaction(txn => {
@@ -121,6 +129,62 @@ function ResultDetail({route, navigation}) {
 
         var str = [];
         var purposeStr = "";
+        var dataColor = "#236cb5"
+        var ewgIcon;
+        if(ewg != null) {//ewg 등급이 존재하면
+            switch(ewg){
+                case "1":
+                    ewgIcon = require("../images/ewg_1.png");
+                    break;
+                case "2":
+                    ewgIcon = require("../images/ewg_2.png");
+                    break;
+                case "3":
+                    ewgIcon = require("../images/ewg_3.png");
+                    break;
+                case "4":
+                    ewgIcon = require("../images/ewg_4.png");
+                    break;
+                case "5":
+                    ewgIcon = require("../images/ewg_5.png");
+                    break;
+                case "6":
+                    ewgIcon = require("../images/ewg_6.png");
+                    break;
+                case "7":
+                    ewgIcon = require("../images/ewg_7.png");
+                    break;
+                case "8":
+                    ewgIcon = require("../images/ewg_8.png");
+                    break;
+                case "9":
+                    ewgIcon = require("../images/ewg_9.png");
+                    break;
+                default :
+            }
+        }
+
+        if(data != null) {//근거자료 정보가 존재하면
+            switch(data) {
+                case "None":
+                    dataColor ="#E43D30";
+                    break;
+                case "Limited":
+                    dataColor ="#E45317";
+                    break;
+                case "Fair":
+                    dataColor ="#FF9E18";
+                    break;
+                case "Good":
+                    dataColor ="#62A52E";
+                    break;
+                case "Robust":
+                    dataColor ="#009D4F";
+                    break;
+                default:
+            }
+        }
+
         if(purpose != null) {//배합목적이 존재하면
             str = purpose.split(" ");
             for(let i = 0; i < str.length; i++){
@@ -165,22 +229,8 @@ function ResultDetail({route, navigation}) {
         return (
             <View style={styles.item}>
                 <View style={{flex:0.5, alignItems:'center', marginRight: 10}}>
-                    {(ewg == "1") && <Image style={styles.imgEWG} source={require("../images/ewg_1.png")}/>}
-                    {(ewg == "2") && <Image style={styles.imgEWG} source={require("../images/ewg_2.png")}/>}
-                    {(ewg == "3") && <Image style={styles.imgEWG} source={require("../images/ewg_3.png")}/>}
-                    {(ewg == "4") && <Image style={styles.imgEWG} source={require("../images/ewg_4.png")}/>}
-                    {(ewg == "5") && <Image style={styles.imgEWG} source={require("../images/ewg_5.png")}/>}
-                    {(ewg == "6") && <Image style={styles.imgEWG} source={require("../images/ewg_6.png")}/>}
-                    {(ewg == "7") && <Image style={styles.imgEWG} source={require("../images/ewg_7.png")}/>}
-                    {(ewg == "8") && <Image style={styles.imgEWG} source={require("../images/ewg_8.png")}/>}
-                    {(ewg == "9") && <Image style={styles.imgEWG} source={require("../images/ewg_9.png")}/>}
-                    {(ewg == null) && <Image style={styles.imgEWG} source={require("../images/ewg_none.png")}/>}
-                    {(data == "None") && <Text style={{color: '#E43D30', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
-                    {(data == "Limited") && <Text style={{color: '#E45317', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
-                    {(data == "Fair") && <Text style={{color: '#FF9E18', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
-                    {(data == "Good") && <Text style={{color: '#62A52E', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
-                    {(data == "Robust") && <Text style={{color: '#009D4F', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
-                    {(data == null) && <Text style={styles.title}>No data</Text>}
+                    <Image style={styles.imgEWG} source={ewg == null ? require("../images/ewg_none.png") : ewgIcon}/>
+                    {(data == null) ? <Text style={styles.title}>No data</Text> : <Text style={DataColor(dataColor)}>{data}</Text>}
                 </View>
                 <View style={{flex:2}}>
                     <View style={{flexDirection: 'row', alignItems:'center', backgroundColor: '#b0c1e821'}}>
