@@ -14,7 +14,6 @@ function ResultDetail({route, navigation}) {
     const { costype } = route.params;
     const { b_id } = route.params;
 
-
     var FItems = [];
     var where;
     var ing_ids = "";
@@ -87,7 +86,8 @@ function ResultDetail({route, navigation}) {
                                (tx, results) => {
                                  console.log('insert result');
                                  if (results.rowsAffected > 0) {
-                                   alert('검색기록이 저장되었습니다.');
+                                   //alert('검색기록이 저장되었습니다.');
+                                   navigation.navigate('Ewg');
                                  } else {
                                    alert('검색기록 저장에 실패하였습니다. 다시 시도해주세요.');
                                  }
@@ -105,7 +105,7 @@ function ResultDetail({route, navigation}) {
                             }
                          }
                     } else {
-                        alert('No data found');
+                        alert('성분명을 찾을 수 없습니다.');
                     }
                 }
             );
@@ -178,7 +178,12 @@ function ResultDetail({route, navigation}) {
                     {(ewg == "9") && <Image style={styles.imgEWG} source={require("../images/ewg_9.png")}/>}
                     {(ewg == "10") && <Image style={styles.imgEWG} source={require("../images/ewg_10.png")}/>}
                     {(ewg == null) && <Image style={styles.imgEWG} source={require("../images/ewg_none.png")}/>}
-                    {(data == null) ? <Text style={styles.title}>No data</Text> : <Text style={styles.title}>{data}</Text>}
+                    {(data == "None") && <Text style={{color: '#E43D30', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
+                    {(data == "Limited") && <Text style={{color: '#E45317', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
+                    {(data == "Fair") && <Text style={{color: '#FF9E18', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
+                    {(data == "Good") && <Text style={{color: '#62A52E', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
+                    {(data == "Robust") && <Text style={{color: '#009D4F', fontWeight: 'bold', fontSize: 15}}>{data}</Text>}
+                    {(data == null) && <Text style={styles.title}>No data</Text>}
                 </View>
                 <View style={{flex:2}}>
                     <Text style={styles.name}>{name}</Text>
