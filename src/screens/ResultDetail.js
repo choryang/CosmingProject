@@ -1,5 +1,5 @@
-import React, { useState, useEffect, BackHandler } from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView, BackHandler } from 'react-native';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connction to access the pre-populated user_db.db
@@ -19,6 +19,8 @@ function ResultDetail({route, navigation}) {
     var ing_ids = "";
     var sDate;
     var sTime;
+
+
 
     function addZero(date) {
 
@@ -117,10 +119,7 @@ function ResultDetail({route, navigation}) {
             );
         });
 
-   }, []);
-
-
-
+   }, [route.params?.screenId]);
 
 
 

@@ -8,7 +8,7 @@ function CosWebView({navigation}) {
 
         <View style={{flex: 1, backgroundColor: '#ffffff'}}>
             <WebView
-              source={{uri: 'http://kcia.or.kr/cid/main/'}}
+              source={{uri: 'https://www.ewg.org/skindeep/'}}
               style={{ marginTop: 20}}
             />
         </View>

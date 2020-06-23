@@ -14,6 +14,7 @@ import CropImage from './CropImage';
 import SearchModal from './SearchModal';
 import LikeModal from './LikeModal';
 import CosWebView from './CosWebView';
+import EWGWebView from './EWGWebView';
 import DeleteModal from './DeleteModal';
 import EwgModal from './EwgModal';
 
@@ -31,7 +32,7 @@ function App() {
 
 return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home"  headerMode="none" backBehavior="initialRoute">
+        <Stack.Navigator initialRouteName="Home"  headerMode="none">
             <Stack.Screen name="Search" component={SearchModal} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
             <Stack.Screen name="Like" component={LikeModal} initialParams={{ id: 0, cosname: "제품이름", costype: " ", cosmemo: "메모", screenId: 1 }} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
             <Stack.Screen name="Delete" component={DeleteModal} initialParams={{ id: 0, screenId: 1 }} options={{cardOverlayEnabled: false,/*안드로이드*/ cardStyle: {backgroundColor: 'transparent'}}}/>
@@ -43,6 +44,7 @@ return (
             <Stack.Screen name="Detail" component={ResultDetail}/>
             <Stack.Screen name="Crop" component={CropImage}/>
             <Stack.Screen name="CosWebView" component={CosWebView}/>
+            <Stack.Screen name="EWGWebView" component={EWGWebView}/>
         </Stack.Navigator>
     </NavigationContainer>
 );

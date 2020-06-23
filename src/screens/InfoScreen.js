@@ -16,6 +16,15 @@ function InfoScreen({navigation}) {
       }
     }
 
+    const setVisible3 = () => {
+      if (isVisible1 != 3){
+         setIsVisible1(3);
+       }
+      else{
+         setIsVisible1(0);
+      }
+    }
+
 
     const setVisible4 = () => {
       if (isVisible1 != 4){
@@ -51,25 +60,51 @@ function InfoScreen({navigation}) {
                 </TouchableOpacity>
                 {(isVisible1 == 2) &&
                 <View>
-                    <Text style={styles.TextArticle} >대한화장품협회에서 제공하는 성분사전을 기반으로 하고 있습니다.</Text>
+                    <Text style={styles.TextArticle} >코스밍은 이용자분들께 정확하고 신뢰도 높은 정보를 제공하기 위해 노력하고 있습니다.</Text>
+                    <Text style={styles.TextArticlePadding} >배합목적은 대한화장품협회 성분사전을 바탕으로 이해하기 쉽도록 재구성했습니다.</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('CosWebView')}>
-                    <Text style={styles.TextWebView}>대한화장품협회 - 성분사전 페이지로 이동하기(클릭)</Text>
+                        <Text style={styles.TextWebView}>대한화장품협회 - 성분사전 페이지로 이동하기(클릭)</Text>
                     </TouchableOpacity>
+                    <Text style={styles.TextArticlePadding} >스킨딥 등급은 스킨딥 홈페이지에서 확인하실 수 있습니다</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('EWGWebView')}>
+                        <Text style={styles.TextWebView}>스킨딥 홈페이지로 이동하기(클릭)</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.TextArticlePadding}>알러지 유발물질을 비롯한 각종 정보들은 식품의약품 안전처 홈페이지에서 모두 확인하실 수 있습니다.</Text>
+                    <Text style={styles.TextArticlePadding}>앞으로 이용자분들께 더욱 정확하고 유용한 정보를 드릴 수 있는 코스밍이 되겠습니다!</Text>
                 </View>}
+
+                <TouchableOpacity activeOpacity={1} style={(isVisible1 == 3) ? styles.ItemSelect : styles.Item} onPress={setVisible3}>
+                    <Text style={(isVisible1 == 3) ? styles.TextSelect : styles.ItemText}>Q. 성분이 인식되지 않아요.</Text>
+                    {(isVisible1 == 3) ? <Text style={styles.TextSelect}>▲</Text> : <Text style={styles.ItemText}>▼</Text>}
+                </TouchableOpacity>
+                {(isVisible1 == 3) &&
+                <>
+                <Text style={styles.TextArticle}>코스밍의 성분 인식은 네이버의 이미지-문자 인식 서비스를 사용하고 있습니다. 따라서 몇가지 주의사항을 지켜주시면 더욱 빠르고 정확한 정보를 드릴 수 있습니다.</Text>
+                <Text style={styles.TextArticle}>1. 가능한 그림자가 없는 이미지를 사용해주세요.</Text>
+                <Text style={styles.TextArticle}>2. 해상도가 너무 낮은 이미지의 사용은 가급적 피해주세요.</Text>
+                <Text style={styles.TextArticle}>3. 최대한 성분표만 보이도록 이미지를 편집해주세요.</Text>
+                <Text style={styles.TextArticle}>4. 성분표 양옆으로 다른 텍스트가 보이지 않게 편집해주세요.</Text>
+                <Text style={styles.TextArticlePadding}>앞으로 더 발전하는 코스밍이 되겠습니다. 감사합니다.</Text>
+                </>}
 
                 <TouchableOpacity activeOpacity={1} style={(isVisible1 == 4) ? styles.ItemSelect : styles.Item} onPress={setVisible4}>
                     <Text style={(isVisible1 == 4) ? styles.TextSelect : styles.ItemText}>Q. 코스밍의 정보가 잘못됐어요! 고쳐주세요.</Text>
                     {(isVisible1 == 4) ? <Text style={styles.TextSelect}>▲</Text> : <Text style={styles.ItemText}>▼</Text>}
                 </TouchableOpacity>
                 {(isVisible1 == 4) &&
-                <Text style={styles.TextArticle}>개발자 이메일로 잘못된 정보를 알려주세요! (okee0815@gmail.com)</Text>}
+                <Text style={styles.TextArticle}>코스밍의 정보가 잘못되었다면 개발자 이메일(okee0815@gmail.com)로 연락주시면 빠른시일내에 수정하도록 하겠습니다. 불편을 드려 죄송합니다.</Text>}
 
                 <TouchableOpacity activeOpacity={1} style={(isVisible1 == 5) ? styles.ItemSelect : styles.Item} onPress={setVisible5}>
                     <Text style={(isVisible1 == 5) ? styles.TextSelect : styles.ItemText}>Q. 오류가 발생했어요. 어떻게 해야 하나요?</Text>
                     {(isVisible1 == 5) ? <Text style={styles.TextSelect}>▲</Text> : <Text style={styles.ItemText}>▼</Text>}
                 </TouchableOpacity>
                 {(isVisible1 == 5) &&
-                <Text style={styles.TextArticle}>개발자 이메일로 오류사항을 알려주세요! (okee0815@gmail.com)</Text>}
+                <>
+                    <Text style={styles.TextArticle}>앱 사용중 오류 발생 시 하기사항을 적어 개발자 이메일(okee0815@gmail.com)로 연락주시면 빠른 시일 내에 수정하도록 하겠습니다. 앞으로 더 발전하는 코스밍이 되겠습니다. 불편을 드려 죄송합니다.</Text>
+                    <Text style={styles.TextArticle}>1. 오류가 발생한 화면</Text>
+                    <Text style={styles.TextArticle}>2. 오류가 발생한 상황 설명(예시: 내 서랍에서 분석결과를 보고 뒤로가기를 눌렀는데 앱이 꺼졌어요.)</Text>
+                    <Text style={styles.TextArticle}>(예시: 내 서랍에서 분석결과를 보고 뒤로가기를 눌렀는데 앱이 꺼졌어요.)</Text>
+                </>}
             </View>
         </View>
     );
@@ -118,6 +153,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: -5,
         paddingBottom: 10,
+        paddingHorizontal: 10
+
+    },
+
+    TextArticlePadding: {
+        color: '#236cb5',
+        fontSize: 12,
+        marginTop: -5,
+        paddingBottom: 10,
+        paddingTop: 20,
         paddingHorizontal: 10
 
     },

@@ -112,7 +112,7 @@ function CropImage({route, navigation}) {
                         comma = 0 //,로 끝나지 않음 > 하나의 성분
                     }
                 }
-            navigation.navigate('Detail', {screenId: 0, image: croppedImage, Data: tempArray, b_id: 0});
+            navigation.replace('Detail', {screenId: 0, image: croppedImage, Data: tempArray, b_id: 0});
 
         }).catch((error) =>
         {
@@ -134,6 +134,7 @@ function CropImage({route, navigation}) {
                 >
                         <Image style={{height: '20%', resizeMode: 'contain'}} source={require('../images/cropicon.png')} />
                         <Text style={{fontWeight: 'bold', color: '#236cb5', fontSize: 12}}>이미지를 편집하려면 여기를 클릭하세요</Text>
+                        <Text style={{color: '#236cb5', fontSize: 10}}>(최대한 성분표만 보이도록 잘라주세요.)</Text>
                 </TouchableOpacity>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 30, marginTop: 50}}>

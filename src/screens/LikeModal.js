@@ -76,7 +76,7 @@ function LikeModal({route, navigation}) {
                             }
                             else if( screenId == 3) {// 분석결과 화면에서 내 서랍 저장 눌렀을 때
                                 alert('내 서랍에 저장되었습니다.');
-                                navigation.navigate('MyCosmetic', {refresh: rand});
+                                navigation.replace('MyCosmetic', {refresh: rand});
                             }
                             else {
                                 if(name != cosname || type != costype || type != cosmemo){

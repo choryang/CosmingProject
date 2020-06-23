@@ -38,7 +38,7 @@ function SearchModal({navigation}) {
                 }
                 else {
                     if(response.uri){
-                        navigation.navigate('Crop', {dataUri: response.uri});
+                        navigation.replace('Crop', {dataUri: response.uri});
                     }
                     else {
                         navigation.goBack();

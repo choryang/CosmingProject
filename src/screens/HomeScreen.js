@@ -36,8 +36,8 @@ var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
         });
 
         BackHandler.addEventListener("hardwareBackPress", handleBackButton);
-
         return () => BackHandler.removeEventListener("hardwareBackPress", handleBackButton);
+
     }, []);
 
 

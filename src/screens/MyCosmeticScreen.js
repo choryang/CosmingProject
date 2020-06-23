@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, BackHandler } from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -10,6 +10,7 @@ var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 function MyCosmeticScreen({route, navigation}) {
 
     const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
+
 
     useEffect(() =>
     {
@@ -33,6 +34,7 @@ function MyCosmeticScreen({route, navigation}) {
 
     }, [route.params?.refresh]);
 
+
     const Item = ({b_id, name, type, ing_ids, memo, img}) => {
 
 
@@ -43,7 +45,7 @@ function MyCosmeticScreen({route, navigation}) {
             ings.push(temp[i]);
         }
 
-        navigation.push('Detail', {screenId: 2, image: img, Data: ings, cosname: name, costype: type});
+        navigation.navigate('Detail', {screenId: 2, image: img, Data: ings, cosname: name, costype: type});
      }
 
 
