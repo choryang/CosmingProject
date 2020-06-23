@@ -119,7 +119,7 @@ function ResultDetail({route, navigation}) {
             );
         });
 
-   }, [route.params?.screenId]);
+   }, []);
 
 
 

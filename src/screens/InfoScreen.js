@@ -102,7 +102,7 @@ function InfoScreen({navigation}) {
                 <>
                     <Text style={styles.TextArticle}>앱 사용중 오류 발생 시 하기사항을 적어 개발자 이메일(okee0815@gmail.com)로 연락주시면 빠른 시일 내에 수정하도록 하겠습니다. 앞으로 더 발전하는 코스밍이 되겠습니다. 불편을 드려 죄송합니다.</Text>
                     <Text style={styles.TextArticle}>1. 오류가 발생한 화면</Text>
-                    <Text style={styles.TextArticle}>2. 오류가 발생한 상황 설명(예시: 내 서랍에서 분석결과를 보고 뒤로가기를 눌렀는데 앱이 꺼졌어요.)</Text>
+                    <Text style={styles.TextArticle}>2. 오류가 발생한 상황 설명</Text>
                     <Text style={styles.TextArticle}>(예시: 내 서랍에서 분석결과를 보고 뒤로가기를 눌렀는데 앱이 꺼졌어요.)</Text>
                 </>}
             </View>

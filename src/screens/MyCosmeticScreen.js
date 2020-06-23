@@ -45,7 +45,7 @@ function MyCosmeticScreen({route, navigation}) {
             ings.push(temp[i]);
         }
 
-        navigation.navigate('Detail', {screenId: 2, image: img, Data: ings, cosname: name, costype: type});
+        navigation.push('Detail', {screenId: 2, image: img, Data: ings, cosname: name, costype: type});
      }
 
 
