@@ -16,7 +16,6 @@ function DeleteModal({route, navigation}) {
             'DELETE FROM board WHERE b_id=?',
             [id],
             (tx, results) => {
-                console.log('Results', results.rowsAffected);
                 if (results.rowsAffected) {
                     alert('삭제되었습니다.');
                     if(screenId == 1){
