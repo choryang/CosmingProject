@@ -87,7 +87,7 @@ function RecordScreen({route, navigation}) {
             <View style={{flex: 1}}>
                 <NativeAdView
                    style={{width: "100%", alignSelf: "center", height: 85}}
-                   adUnitID="ca-app-pub-3940256099942544/2247696110" // TEST adUnitID
+                   adUnitID="ca-app-pub-5912351897978387/5829023206" // TEST adUnitID
                  >
                     <View style={{ height: 85, width: "100%", justifyContent: "center", backgroundColor: "white"}}>
                           <AdBadge />
