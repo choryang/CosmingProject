@@ -8,7 +8,7 @@ var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 function ResultDetail({route, navigation}) {
 
     const{ screenId } = route.params;
-    const { dataUri } = route.params;
+    const { imageUri } = route.params;
     const { Data } = route.params;
     const { cosname } = route.params;
     const { costype } = route.params;
@@ -46,17 +46,22 @@ function ResultDetail({route, navigation}) {
                 (tx, results) => {
                     var len = results.rows.length;
                     if (len > 0) {
-                        for (let i = 0; i < len; i++) {
-                            FItems.push(results.rows.item(i));
-                            ing_ids = ing_ids + results.rows.item(i).ing_id + " ";
-                        }
                         if(screenId == 0){
+                            for (let i = 0; i < Data.length; i++){
+                                for (let j = 0; j < len; j++) {
+                                    if(Data[i] == results.rows.item(j).ing_name) {
+                                        FItems.push(results.rows.item(j));
+                                        ing_ids = ing_ids + results.rows.item(j).ing_id + " ";
+                                        break;
+                                    }
+                                }
+                            }
                             var sRecord = new Date();
                             var sDate = sRecord.getFullYear() + "-" + addZero(sRecord.getMonth() + 1) + "-" + addZero(sRecord.getDate());
                             var sTime = addZero(sRecord.getHours()) + ":" + addZero(sRecord.getMinutes()) + ":" + addZero(sRecord.getSeconds());
                             tx.executeSql(
                                'INSERT INTO board (search_date, search_time, name, costype, ing_ids, img) VALUES (?,?,?,?,?,?)',
-                               [sDate,sTime,' ',' ',ing_ids,dataUri],
+                               [sDate,sTime,' ',' ',ing_ids,imageUri],
                                (tx, results) => {
                                  if (results.rowsAffected > 0) {
                                    alert('검색기록이 저장되었습니다.');
@@ -66,6 +71,16 @@ function ResultDetail({route, navigation}) {
                                }
                              );
                          }
+                        else {//검색기록이나 내 서랍에서 결과화면으로 이동했을 때
+                             for (let i = 0; i < Data.length; i++){
+                                 for (let j = 0; j < len; j++) {
+                                     if(Data[i] == results.rows.item(j).ing_id) {
+                                         FItems.push(results.rows.item(j));
+                                         break;
+                                     }
+                                 }
+                             }
+                        }
                     } else {
                         alert('No data found');
                     }
@@ -88,76 +103,66 @@ function ResultDetail({route, navigation}) {
     const Item = ({id, name, purpose}) => {
         var str = [];
         var purposeStr = "";
-        str = purpose.split(" ");
-        for(let i = 0; i < str.length; i++){
-            switch(str[i]){
-                case "1":
-                    purposeStr = purposeStr + "보습효과  ";
-                    break;
-                case "2":
-                    purposeStr = purposeStr + "유화제  ";
-                    break;
-                case "3":
-                    purposeStr = purposeStr + "세정효과  ";
-                    break;
-                case "4":
-                    purposeStr = purposeStr + "사용감개선  ";
-                    break;
-                case "5":
-                    purposeStr = purposeStr + "보존제  ";
-                    break;
-                case "6":
-                    purposeStr = purposeStr + "색소  ";
-                    break;
-                case "7":
-                    purposeStr = purposeStr + "기능성원료  ";
-                    break;
-                case "8":
-                    purposeStr = purposeStr + "향료  ";
-                    break;
-                case "9":
-                    purposeStr = purposeStr + "기타  ";
-                    break;
-                default :
-                    purposeStr = purposeStr + "";
+        if(purpose != null) {//배합목적이 존재하면
+            str = purpose.split(" ");
+            for(let i = 0; i < str.length; i++){
+                switch(str[i]){
+                    case "1":
+                        purposeStr = purposeStr + "보습효과  ";
+                        break;
+                    case "2":
+                        purposeStr = purposeStr + "유화제  ";
+                        break;
+                    case "3":
+                        purposeStr = purposeStr + "세정효과  ";
+                        break;
+                    case "4":
+                        purposeStr = purposeStr + "사용감개선  ";
+                        break;
+                    case "5":
+                        purposeStr = purposeStr + "보존제  ";
+                        break;
+                    case "6":
+                        purposeStr = purposeStr + "색소  ";
+                        break;
+                    case "7":
+                        purposeStr = purposeStr + "기능성원료  ";
+                        break;
+                    case "8":
+                        purposeStr = purposeStr + "향료  ";
+                        break;
+                    case "9":
+                        purposeStr = purposeStr + "기타  ";
+                        break;
+                    default :
+                        purposeStr = purposeStr + "";
+                }
+
             }
         }
+        else {
+            purposeStr = "No data";
+        }
         return (
-            <View>
-                <View style={styles.itemList}>
-                    <View style={{flex: 1, alignItems:'center'}}>
-                        <Text style={styles.title}>{id}</Text>
-                    </View>
-                    <View style={{flex: 3.5, alignItems:'center'}}>
-                        <Text style={styles.text}>{name}</Text>
-                    </View>
+            <View style={styles.item}>
+                <View style={{flex:0.5, alignItems:'center', marginRight: 10}}>
+                    <Text style={styles.text}>성분코드</Text>
+                    <Text style={styles.title}>{id}</Text>
                 </View>
-                <View style={styles.itemPurpose}>
-                    <View style={{flex: 1, alignItems:'center'}}>
-                        <Text style={styles.title}>효능/효과 : </Text>
+                <View style={{flex:2}}>
+                    <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems:'center', padding:5, backgroundColor: '#b0c1e821'}}>
+                        <TouchableOpacity onPress={() => navigation.navigate('CosWebView', {code: id})}>
+                            <Text style={styles.name}>{name}</Text>
+                        </TouchableOpacity>
+                        <Text style={{color: '#E43D30', fontSize: 10, paddingLeft: 5}}>알러지유발물질</Text>
+                        <Text style={{color: '#E43D30', fontSize: 10, paddingLeft: 5}}>알러지유발물질</Text>
                     </View>
-                    <View style={{flex: 3.5, alignItems:'center'}}>
-                        <Text style={styles.text}>{purposeStr}</Text>
-                    </View>
+                    <Text style={styles.text}>{purposeStr}</Text>
                 </View>
             </View>
         );
     }
 
-    const ListHeader = () => {
-
-        return(
-            <View style={styles.listHeader}>
-                <View style={{flex: 1, alignItems:'center'}}>
-                    <Text style={styles.title}>성분코드</Text>
-                </View>
-                <View style={{flex: 3.5, alignItems:'center'}}>
-                    <Text style={styles.title}>성분명</Text>
-                </View>
-            </View>
-        );
-
-    };
 
     return (
         <View style={{flex: 1, backgroundColor: '#b0c1e821', paddingHorizontal: 20}}>
@@ -167,7 +172,7 @@ function ResultDetail({route, navigation}) {
             </View>
             <View style={{flex: 1}}>
                 <View style={{justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#236cb5'}}>
-                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+dataUri}} />
+                    <Image style={{height: 200, width: '100%', resizeMode: 'contain'}} source={{uri: imageUri}} />
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     {(screenId == 2) &&
@@ -180,7 +185,6 @@ function ResultDetail({route, navigation}) {
                     <View style={{height: 30}}></View>
                 </View>
                 <View style={styles.itemContainer}>
-                   <ListHeader />
                    <FlatList
                         data={FItems}
                         renderItem={({ item }) => <Item id={item.ing_id} name={item.ing_name} purpose={item.ing_purpose}/>}
@@ -214,39 +218,37 @@ const styles = StyleSheet.create({
     },
 
     itemList: {
-        flexDirection: 'row',
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 3,
         marginHorizontal: 5,
-
     },
 
     itemPurpose: {
-        flexDirection: 'row',
+        flex: 2,
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 3,
         marginHorizontal: 5,
-        borderColor: '#00000029',
-        borderBottomWidth: 1,
-        backgroundColor: '#b0c1e821'
+        //backgroundColor: '#b0c1e821'
     },
 
-    listHeader: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 5,
-            marginHorizontal: 5,
-            borderColor: '#00000029',
-            borderBottomWidth: 1
-        },
+    imgEWG: {
+        height: 40,
+        width: 40,
+        resizeMode: 'contain'
+    },
+
 
     item: {
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
+       flex: 1,
+       flexDirection: 'row',
+       paddingVertical: 10,
+       marginHorizontal: 10,
+       borderColor: '#236cb5',
+       borderBottomWidth: 1
+     },
 
     title: {
         color: '#236cb5',
@@ -254,13 +256,27 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 
+    name: {
+        color: '#236cb5',
+        fontWeight: 'bold',
+        fontSize: 15,
+        paddingBottom: 5,
+        paddingLeft: 5,
+        textDecorationLine: 'underline'
+        //backgroundColor: '#b0c1e821'
+    },
+
     text: {
         color: '#236cb5',
         fontSize: 13,
+        paddingVertical: 3,
+        paddingTop: 10,
+        marginHorizontal: 5
     },
 
 
  });
+
 
 
 

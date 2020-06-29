@@ -9,7 +9,7 @@ var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
             db.transaction(tx => {
                 tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS board (b_id INTEGER PRIMARY KEY AUTOINCREMENT, search_date VARCHAR(20), search_time VARCHAR(20), name VARCHAR(20), costype VARCHAR(20), like INTEGER DEFAULT 0, ing_ids VARCHAR(255), img TEXT)',
+                'CREATE TABLE IF NOT EXISTS board (b_id INTEGER PRIMARY KEY AUTOINCREMENT, search_date VARCHAR(20), search_time VARCHAR(20), name VARCHAR(20), costype VARCHAR(20), like INTEGER DEFAULT 0, ing_ids VARCHAR(255), img VARCHAR(255))',
                 [],
                 );
 

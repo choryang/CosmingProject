@@ -44,14 +44,14 @@ function MyCosmeticScreen({route, navigation}) {
             ings.push(temp[i]);
         }
 
-        navigation.navigate('Detail', {screenId: 2, dataUri: img, Data: ings, cosname: name, costype: type});
+        navigation.navigate('Detail', {screenId: 2, imageUri: img, Data: ings, cosname: name, costype: type});
      }
 
 
       return (
         <TouchableOpacity style={styles.item} onPress={ingData}>
           <View style={{flex:1.5, alignItems: 'center'}}>
-            <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: 'data:image/png;base64,'+img}} />
+            <Image style={{height: 55, width: 55, resizeMode: 'contain'}} source={{uri: img}} />
           </View>
           <View style={{flex:2}}>
            <Text style={styles.title}>{name}</Text>
@@ -79,7 +79,9 @@ function MyCosmeticScreen({route, navigation}) {
             <View style={{flex: 1}}>
 
                   {(FlatListItems.length == 0) ?
-                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingLeft: 10}}>데이터가 없습니다.</Text>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{ color: '#035eac', fontWeight: 'bold', fontSize: 15, paddingLeft: 10}}>아직 내 서랍에 담은 제품이 없습니다.</Text>
+                  </View>
                   :
                   <FlatList
                     data={FlatListItems}
