@@ -1,8 +1,32 @@
 import React, { useState } from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
 var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+
+const typeData = [
+    {
+        id: 1,
+        title: 'Hair / Body care'
+    },
+    {
+        id: 2,
+        title: 'Skin care'
+    },
+    {
+        id: 3,
+        title: 'Sun care'
+    },
+    {
+        id: 4,
+        title: 'Make up'
+    },
+    {
+        id: 5,
+        title: 'Cleansing'
+    }
+];
+
 
 function LikeModal({route, navigation}) {
 
@@ -13,7 +37,28 @@ function LikeModal({route, navigation}) {
 
     const [name, onChangeName] = useState(cosname);
     const [type, onChangeType] = useState(costype);
+    const [selected, setSelected] = useState(0);
     var rand = Math.random();
+
+    function Item({typeId, typeName}) {
+
+        typeSelect = () => {
+            if(selected == typeId){
+                setSelected(0);
+                onChangeType(costype);
+            }
+            else {
+                setSelected(typeId);
+                onChangeType(typeName);
+            }
+        }
+
+        return (
+            <TouchableOpacity style={(selected == typeId) ? styles.ItemSelect : styles.Item} onPress={typeSelect}>
+                <Text style={(selected == typeId) ? styles.TextSelect : styles.ItemText}>{typeName}</Text>
+            </TouchableOpacity>
+        );
+    }
 
     LikeCos = () => {
             db.transaction((tx)=> {
@@ -62,16 +107,14 @@ function LikeModal({route, navigation}) {
                     />
                 </View>
                 <View>
-                    <Text style={{color: '#035eac', fontSize: 11}}>제품유형</Text>
-                    <TextInput
-                    style={{width: '100%', borderColor: '#035eac', borderBottomWidth: 2, marginBottom: 15, paddingBottom: 1,
-                       fontWeight: 'bold', fontSize: 13, color: '#035eac'}}
-                       onChangeText={text => onChangeType(text)}
-                       placeholder={'제품유형을 입력해주세요'}
-                       textAlign={'left'}
-                       maxLength={10}
-                       placeholderTextColor={'#035eac50'}
-                    />
+                    <Text style={{color: '#035eac', fontSize: 11}}>제품 유형</Text>
+                        <FlatList
+                            contentContainerStyle={styles.List}
+                            numColumns={3}
+                            data={typeData}
+                            renderItem={({item}) => <Item typeId={item.id} typeName={item.title}/>}
+                            keyExtractor={(item) => item.id.toString()}
+                        />
                 </View>
                 <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
                     <TouchableOpacity style={{marginRight: 10}} onPress={() => navigation.goBack()}>
@@ -88,6 +131,11 @@ function LikeModal({route, navigation}) {
 
 
 const styles = StyleSheet.create({
+    List: {
+        marginTop: 5,
+        marginBottom: 15
+    },
+
     Item: {
         padding: 7,
         marginRight: 5,
