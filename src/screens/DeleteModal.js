@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, ScrollView } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function DeleteModal({route, navigation}) {
 
@@ -16,7 +16,6 @@ function DeleteModal({route, navigation}) {
             'DELETE FROM board where b_id=?',
             [id],
             (tx, results) => {
-                console.log('Results', results.rowsAffected);
                 if (results.rowsAffected) {
                     alert('삭제되었습니다.');
                     if(screenId == 1){

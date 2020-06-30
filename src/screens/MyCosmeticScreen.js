@@ -3,7 +3,7 @@ import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, Fl
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function MyCosmeticScreen({route, navigation}) {
 
@@ -14,13 +14,12 @@ function MyCosmeticScreen({route, navigation}) {
         var len = 0;
         var FItems = [];//임시배열
 
-        var sql = 'SELECT b_id, name, costype, ing_ids, img FROM board where like = 1';
+        var sql = 'SELECT b_id, cos_name, cos_type, ing_ids, img FROM board where like = 1';
         db.transaction(tx => {
             tx.executeSql(
                 sql, [],
                 (tx, results) => {
                     len = results.rows.length;
-                    console.log('len', len);
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             FItems.push(results.rows.item(i));
@@ -85,7 +84,7 @@ function MyCosmeticScreen({route, navigation}) {
                   :
                   <FlatList
                     data={FlatListItems}
-                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.name} type={item.costype} ing_ids={item.ing_ids} img={item.img}/>}
+                    renderItem={({ item }) => <Item b_id={item.b_id} name={item.cos_name} type={item.cos_type} ing_ids={item.ing_ids} img={item.img}/>}
                     keyExtractor={(item, index) => index.toString()}
                   />}
 

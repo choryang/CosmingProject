@@ -2,12 +2,8 @@ import React, {useState, useEffect} from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import Header from './Header';
 import Modal from 'react-native-modal';
-//import ImagePicker from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImgToBase64 from 'react-native-image-base64';
-//import { openDatabase } from 'react-native-sqlite-storage';
-//Connection to access the pre-populated user_db.db
-//var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
 
 
 function CropImage({route, navigation}) {

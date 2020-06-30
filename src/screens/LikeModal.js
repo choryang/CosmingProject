@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, TextInput, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 const typeData = [
     {
@@ -63,10 +63,9 @@ function LikeModal({route, navigation}) {
     LikeCos = () => {
             db.transaction((tx)=> {
                 tx.executeSql(
-                    'UPDATE board set name=?, costype=?, like=1 where b_id=?',
+                    'UPDATE board set cos_name=?, cos_type=?, like=1 where b_id=?',
                     [name, type, id],
                     (tx, results) => {
-                        console.log('Results',results.rowsAffected);
                         if(results.rowsAffected){
                             if( screenId == 1 ){
                                 alert('내 서랍에 저장되었습니다.');

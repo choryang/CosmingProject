@@ -8,7 +8,6 @@ import HomeScreen from './HomeScreen';
 import RecordScreen from './RecordScreen';
 import MyCosmeticScreen from './MyCosmeticScreen';
 import InfoScreen from './InfoScreen';
-import LoginScreen from './LoginScreen';
 import ResultDetail from './ResultDetail';
 import CropImage from './CropImage';
 import SearchModal from './SearchModal';

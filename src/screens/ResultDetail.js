@@ -3,7 +3,7 @@ import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, Fl
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connction to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
 
@@ -23,6 +23,14 @@ function ResultDetail({route, navigation}) {
         return date;
     }
 
+    EtcColor = (etcTextColor) => {
+        return {
+            fontSize: 10,
+            paddingLeft: 5,
+            color: etcTextColor
+        }
+    }
+
 
 
     useEffect(() => {
@@ -34,7 +42,7 @@ function ResultDetail({route, navigation}) {
             where = 'ing_id';
         }
 
-        var sql = 'SELECT ing_id, ing_name, ing_purpose FROM ing where ' + where + ' in (';
+        var sql = 'SELECT ing_id, ing_code, ing_name, ing_purpose, ing_etc FROM ingredient where ' + where + ' in (';
         for(let i = 0; i < Data.length - 1; i++){
             sql = sql + '?,';
         }
@@ -60,7 +68,7 @@ function ResultDetail({route, navigation}) {
                             var sDate = sRecord.getFullYear() + "-" + addZero(sRecord.getMonth() + 1) + "-" + addZero(sRecord.getDate());
                             var sTime = addZero(sRecord.getHours()) + ":" + addZero(sRecord.getMinutes()) + ":" + addZero(sRecord.getSeconds());
                             tx.executeSql(
-                               'INSERT INTO board (search_date, search_time, name, costype, ing_ids, img) VALUES (?,?,?,?,?,?)',
+                               'INSERT INTO board (search_date, search_time, cos_name, cos_type, ing_ids, img) VALUES (?,?,?,?,?,?)',
                                [sDate,sTime,' ',' ',ing_ids,imageUri],
                                (tx, results) => {
                                  if (results.rowsAffected > 0) {
@@ -100,9 +108,12 @@ function ResultDetail({route, navigation}) {
 
 
 
-    const Item = ({id, name, purpose}) => {
+    const Item = ({id, name, purpose, etc}) => {
         var str = [];
         var purposeStr = "";
+        var etcTextColor;
+        var etcText;
+
         if(purpose != null) {//배합목적이 존재하면
             str = purpose.split(" ");
             for(let i = 0; i < str.length; i++){
@@ -143,6 +154,32 @@ function ResultDetail({route, navigation}) {
         else {
             purposeStr = "No data";
         }
+
+        if(etc != null) {
+            switch(etc) {
+                case 1:
+                    etcText = "알러지 유발";
+                    etcTextColor = "#E43D30";
+                    break;
+                case 2:
+                    etcText = "여드름 개선";
+                   etcTextColor = "#236cb5";
+                    break;
+                case 3:
+                    etcText = "주름 개선";
+                    etcTextColor = "#32a852";
+                    break;
+                case 4:
+                    etcText = "미백 효과";
+                    etcTextColor = "#e874d7";
+                    break;
+                case 5:
+                    etcText = "자외선 차단";
+                    etcTextColor = "#7654b8";
+                    break;
+                default:
+            }
+        }
         return (
             <View style={styles.item}>
                 <View style={{flex:0.5, alignItems:'center', marginRight: 10}}>
@@ -154,8 +191,7 @@ function ResultDetail({route, navigation}) {
                         <TouchableOpacity onPress={() => navigation.navigate('CosWebView', {code: id})}>
                             <Text style={styles.name}>{name}</Text>
                         </TouchableOpacity>
-                        <Text style={{color: '#E43D30', fontSize: 10, paddingLeft: 5}}>알러지유발물질</Text>
-                        <Text style={{color: '#E43D30', fontSize: 10, paddingLeft: 5}}>알러지유발물질</Text>
+                        {(etc != null) && <Text style={EtcColor(etcTextColor)}>{etcText}</Text>}
                     </View>
                     <Text style={styles.text}>{purposeStr}</Text>
                 </View>
@@ -187,7 +223,7 @@ function ResultDetail({route, navigation}) {
                 <View style={styles.itemContainer}>
                    <FlatList
                         data={FItems}
-                        renderItem={({ item }) => <Item id={item.ing_id} name={item.ing_name} purpose={item.ing_purpose}/>}
+                        renderItem={({ item }) => <Item id={item.ing_code} name={item.ing_name} purpose={item.ing_purpose} etc={item.ing_etc}/>}
                         keyExtractor={(item, index) => index.toString()}
                    />
                 </View>
@@ -231,13 +267,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 3,
         marginHorizontal: 5,
-        //backgroundColor: '#b0c1e821'
-    },
-
-    imgEWG: {
-        height: 40,
-        width: 40,
-        resizeMode: 'contain'
     },
 
 
@@ -263,14 +292,12 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         paddingLeft: 5,
         textDecorationLine: 'underline'
-        //backgroundColor: '#b0c1e821'
     },
 
     text: {
         color: '#236cb5',
         fontSize: 13,
         paddingVertical: 3,
-        paddingTop: 10,
         marginHorizontal: 5
     },
 

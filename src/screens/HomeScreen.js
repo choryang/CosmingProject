@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 //Connection to access the pre-populated user_db.db
-var db = openDatabase({ name: 'BoIng.db', createFromLocation : 1});
+var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
  function HomeScreen({navigation}) {
     useEffect(() => {
 
             db.transaction(tx => {
                 tx.executeSql(
-                'CREATE TABLE IF NOT EXISTS board (b_id INTEGER PRIMARY KEY AUTOINCREMENT, search_date VARCHAR(20), search_time VARCHAR(20), name VARCHAR(20), costype VARCHAR(20), like INTEGER DEFAULT 0, ing_ids VARCHAR(255), img VARCHAR(255))',
+                'CREATE TABLE IF NOT EXISTS board (b_id INTEGER PRIMARY KEY AUTOINCREMENT, search_date VARCHAR(20), search_time VARCHAR(20), cos_name VARCHAR(20), cos_type VARCHAR(20), like INTEGER DEFAULT 0, ing_ids VARCHAR(255), img VARCHAR(255))',
                 [],
                 );
 

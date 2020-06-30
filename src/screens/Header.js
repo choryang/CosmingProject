@@ -10,7 +10,7 @@ function Header(props) {
             </TouchableOpacity>
             <Image style={{height: '80%', width: '30%', resizeMode: 'contain'}} source={require('../images/homelogo.png')} />
             <TouchableOpacity onPress={props.goHome}>
-                <Image style={{height: 50, width: 50, resizeMode: 'contain'}} source={require('../images/homelarge.png')} />
+                <Image style={{height: 40, width: 40, resizeMode: 'contain'}} source={require('../images/home.png')} />
             </TouchableOpacity>
         </View>
     );
