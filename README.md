@@ -7,3 +7,6 @@ React-Native Based Application Development for Classifying the Purposes of Cosme
 홍민지 : 애플리케이션 디자인<br/>
 이석진 : OCR 개발<br/>
 이옥희 : 애플리케이션 개발<br/>
+
+# App
+Cosming.apk
