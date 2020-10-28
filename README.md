@@ -9,4 +9,5 @@ React-Native Based Application Development for Classifying the Purposes of Cosme
 이옥희 : 애플리케이션 개발<br/>
 
 # App
-Cosming.apk
+Cosming.apk<br/>
+https://drive.google.com/drive/folders/1cM3B5-K1NGzYgvwslctefhClpDvU4xue
