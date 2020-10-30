@@ -11,3 +11,7 @@ React-Native Based Application Development for Classifying the Purposes of Cosme
 # App
 Cosming.apk<br/>
 https://drive.google.com/drive/folders/1cM3B5-K1NGzYgvwslctefhClpDvU4xue<br/>
+
+# Document
+최종 보고서<br/>
+https://drive.google.com/file/d/1mtLbJtO2y_y9yvBto0k6p729y-JV4haI/view?usp=sharing<br/>
