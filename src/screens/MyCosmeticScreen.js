@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
-//Connection to access the pre-populated user_db.db
+
 var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function MyCosmeticScreen({route, navigation}) {
 
-    const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
+    const [FlatListItems, setFlatListItems] = useState([]);
 
     useEffect(() =>
     {
         var len = 0;
-        var FItems = [];//임시배열
+        var FItems = [];
 
         var sql = 'SELECT b_id, cos_name, cos_type, ing_ids, img FROM board where like = 1';
         db.transaction(tx => {
