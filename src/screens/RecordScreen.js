@@ -3,19 +3,19 @@ import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, Fl
 import Modal from 'react-native-modal';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
-//Connection to access the pre-populated user_db.db
+
 var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function RecordScreen({route, navigation}) {
 
-    const [FlatListItems, setFlatListItems] = useState([]); //렌더링할 배열
+    const [FlatListItems, setFlatListItems] = useState([]);
 
 
 
     useEffect(() =>
     {
         var len = 0;
-        var FItems = []; // 임시 배열
+        var FItems = [];
 
         var sql = 'SELECT b_id, search_date, search_time, ing_ids, img FROM board where like = 0';
         db.transaction(tx => {
