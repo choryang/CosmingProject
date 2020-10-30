@@ -2,7 +2,7 @@ import React, { useState, useEffect, BackHandler } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
 import Header from './Header';
 import { openDatabase } from 'react-native-sqlite-storage';
-//Connction to access the pre-populated user_db.db
+
 var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
 function ResultDetail({route, navigation}) {
