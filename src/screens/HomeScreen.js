@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
-//Connection to access the pre-populated user_db.db
+
 var db = openDatabase({ name: 'cosming.db', createFromLocation : 1});
 
  function HomeScreen({navigation}) {
