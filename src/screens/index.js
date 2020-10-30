@@ -20,7 +20,7 @@ const Stack = createStackNavigator();
 function App() {
 
   useEffect(() => {
-        // 컴포넌트가 마운트 되고 setTimeout함수를실행합니다.
+        
         setTimeout(() => {
            SplashScreen.hide();
         }, 3000);
